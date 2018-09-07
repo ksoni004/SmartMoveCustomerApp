@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".HomeActivity"
+    tools:showIn="@layout/app_bar_home">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/tv_header"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/estimated_fare" />
+
+        <LinearLayout
+            android:id="@+id/ll_pickup_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_cornered"
+            android:backgroundTint="@color/grey_background"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/tv_normal"
+                android:layout_width="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_cornered_grey"
+                android:gravity="center"
+                android:minWidth="80dp"
+                android:text="PICKUP"
+                android:textSize="@dimen/smallText_sp_12" />
+
+            <TextView
+                android:id="@+id/tv_pickup_location_text"
+                style="@style/tv_normal"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:padding="10dp"
+                android:text="" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="3dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/sea_green_color" />
+
+        <LinearLayout
+            android:id="@+id/ll_dropoff_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/button_cornered"
+            android:backgroundTint="@color/grey_background"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/tv_normal"
+                android:layout_width="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_cornered_grey"
+                android:gravity="center"
+                android:minWidth="80dp"
+                android:text="DROPOFF"
+                android:textSize="@dimen/smallText_sp_12" />
+
+            <TextView
+                android:id="@+id/tv_dropoff_location_text"
+                style="@style/tv_normal"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:padding="10dp"
+                android:text="" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bt_book_ride"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginBottom="15dip"
+            android:layout_marginLeft="@dimen/button_marginLeft"
+            android:layout_marginRight="@dimen/button_marginRight"
+            android:layout_marginTop="15dip"
+            android:background="@drawable/button_cornered"
+            android:drawableRight="@drawable/iconright_arrow"
+            android:gravity="center_vertical"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:text="@string/book_ride"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/normalText_sp_14"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
