@@ -1,4 +1,4 @@
-package com.smartmovetheapp.smartmove.helpdata;
+package com.smartmovetheapp.smartmove.ui.help.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;

@@ -1,12 +1,13 @@
-package com.smartmovetheapp.smartmove;
+package com.smartmovetheapp.smartmove.ui.help;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
-import com.smartmovetheapp.smartmove.helpdata.CustomExpandableListAdapter;
-import com.smartmovetheapp.smartmove.helpdata.HelpDataPupm;
+import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.ui.help.adapter.CustomExpandableListAdapter;
+import com.smartmovetheapp.smartmove.data.HelpDataPupm;
 
 import java.util.ArrayList;
 import java.util.HashMap;

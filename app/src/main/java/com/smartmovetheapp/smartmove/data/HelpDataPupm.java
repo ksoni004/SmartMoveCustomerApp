@@ -1,4 +1,4 @@
-package com.smartmovetheapp.smartmove.helpdata;
+package com.smartmovetheapp.smartmove.data;
 
 import java.util.HashMap;
 

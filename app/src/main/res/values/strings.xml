@@ -14,10 +14,12 @@
         completions."
     </string>
 
+    <string name="empty_username">Please enter username</string>
+    <string name="empty_password">Please enter password</string>
 
     <!--<string name="app_name">ConsumerApp</string>-->
 
-    <string name="network_error">Opps! No internet connection... </string>
+    <string name="network_error">Oops! No internet connection…</string>
     <string name="enable_location_settings">Please provide location permission </string>
 
     <string name="login">login</string>

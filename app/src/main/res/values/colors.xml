@@ -6,9 +6,9 @@
     <color name="colorAccent">#FF4081</color>
 -->
 
-    <color name="colorPrimary">@color/text_color</color>
+    <!--<color name="colorPrimary">@color/text_color</color>
     <color name="colorPrimaryDark">@color/text_color</color>
-    <color name="colorAccent">@color/text_color</color>
+    <color name="colorAccent">@color/text_color</color>-->
 
     <color name="text_color">#1c1c1c</color>
     <color name="white">#fff</color>
@@ -28,4 +28,15 @@
     <color name="info_box_source">@color/text_color</color>
     <color name="info_box_destination">@color/text_color</color>
     <color name="tracking_experience">@color/text_color</color>
+
+
+
+    <color name="colorPrimary">#38ada9</color>
+    <color name="colorPrimaryDark">#079992</color>
+    <!--<color name="colorAccent">#f6b93b</color>-->
+    <!--<color name="colorAccent">#6d6d6d</color>--><!--first suggestion-->
+    <color name="colorAccent">#38ada9</color><!--second suggestion-->
+    <!--<color name="colorAccent">#CDDC39</color>--><!--third suggestion-->
+    <!--<color name="colorAccent">#50D2C2</color>--><!--forth suggestion-->
+    <color name="colorWhite">#ffffff</color>
 </resources>
