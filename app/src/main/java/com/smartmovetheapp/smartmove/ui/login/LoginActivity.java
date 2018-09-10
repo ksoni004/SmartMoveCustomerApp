@@ -15,12 +15,13 @@ import android.widget.ProgressBar;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
 import com.smartmovetheapp.smartmove.data.repository.AuthRepository;
+import com.smartmovetheapp.smartmove.ui.home.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private CardView cvSignInButton;
     private Button btnSignup;
@@ -97,6 +98,7 @@ class LoginActivity extends AppCompatActivity {
         try {
             validateFields();
             performServerCall();
+            moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
@@ -121,6 +123,6 @@ class LoginActivity extends AppCompatActivity {
 
     private void moveToHomeScreen() {
         finish();
-        //todo: start home screen
+        HomeActivity.start(this);
     }
 }

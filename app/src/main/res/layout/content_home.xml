@@ -8,7 +8,38 @@
     tools:context=".ui.home.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_order_request"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:text="Order Request"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_back_white"
+            android:tint="@color/colorAccent"
+            android:rotation="180"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="12dp"/>
+    </android.support.v7.widget.CardView>
+
+    <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -108,6 +139,6 @@
             android:textSize="@dimen/normalText_sp_14"
             android:textStyle="bold" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>

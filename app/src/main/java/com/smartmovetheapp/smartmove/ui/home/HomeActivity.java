@@ -1,5 +1,6 @@
 package com.smartmovetheapp.smartmove.ui.home;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,9 +14,15 @@ import android.view.MenuItem;
 
 import com.smartmovetheapp.smartmove.ui.help.HelpActivity;
 import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.ui.orderrequest.OrderRequestActivity;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, HomeActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,8 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        findViewById(R.id.cv_order_request).setOnClickListener(button -> OrderRequestActivity.start(this));
     }
 
     @Override

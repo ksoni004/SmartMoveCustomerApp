@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="truck_type_values" >
+        <item>Pickup Truck</item>
+        <item>Cargo Truck</item>
+        <item>Standard Car</item>
+    </string-array>
+</resources>

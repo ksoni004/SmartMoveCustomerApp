@@ -39,4 +39,5 @@
     <!--<color name="colorAccent">#CDDC39</color>--><!--third suggestion-->
     <!--<color name="colorAccent">#50D2C2</color>--><!--forth suggestion-->
     <color name="colorWhite">#ffffff</color>
+    <color name="colorErrorRed">#FF0033</color>
 </resources>
