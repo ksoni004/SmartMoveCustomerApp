@@ -33,8 +33,10 @@ public class OrderRepository {
         Gson gson = new Gson();
         List<Order> orders = new ArrayList<>();
 
-        for (String orderString : stringList) {
-            orders.add(gson.fromJson(orderString, Order.class));
+        if (stringList != null) {
+            for (String orderString : stringList) {
+                orders.add(gson.fromJson(orderString, Order.class));
+            }
         }
 
         return orders;
