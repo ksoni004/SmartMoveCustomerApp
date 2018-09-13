@@ -1,7 +1,5 @@
 package com.smartmovetheapp.smartmove.ui.orderrequest.fragments;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +7,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,10 +46,11 @@ public class PaymentFragment extends Fragment {
     }
 
     private void onNextClick() {
-        AlertDialog loading = new ProgressDialog.Builder(getContext(), R.style.SMDatePickerTheme)
+        AlertDialog loading = new AlertDialog.Builder(getContext(), R.style.SMDatePickerTheme)
                 .setMessage("Transaction in progress..")
                 .create();
 
+        loading.show();
         new Handler(Looper.getMainLooper())
                 .postDelayed(() -> {
                     loading.dismiss();
