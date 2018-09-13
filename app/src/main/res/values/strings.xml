@@ -53,4 +53,7 @@
     <string name="title_activity_help">SmartMove - Customer Help and FAQs</string>
     <string name="default_error">We are facing some issue, try after sometime.</string>
     <string name="snackbar_internet_unavailable">Internet unavailable</string>
+    <string name="title_activity_trip">Trips</string>
+    <string name="tab_text_1">Running Trips</string>
+    <string name="tab_text_2">Finished Trips</string>
 </resources>

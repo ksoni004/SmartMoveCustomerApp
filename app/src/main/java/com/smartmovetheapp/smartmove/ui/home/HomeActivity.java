@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.smartmovetheapp.smartmove.ui.help.HelpActivity;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.ui.orderrequest.OrderRequestActivity;
+import com.smartmovetheapp.smartmove.ui.trips.TripActivity;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,7 +81,7 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
 
         } else if (id == R.id.nav_trips) {
-
+            TripActivity.start(this);
         } else if (id == R.id.nav_wallet) {
 
         } else if (id == R.id.nav_invite) {

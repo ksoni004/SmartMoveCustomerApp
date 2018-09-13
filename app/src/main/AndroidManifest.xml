@@ -13,26 +13,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.login.LoginActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.help.HelpActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_help" />
-        <activity android:name=".ui.orderrequest.OrderRequestActivity"
-            android:screenOrientation="portrait"/>
-
+            android:label="@string/title_activity_help"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.orderrequest.OrderRequestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.trips.TripActivity"
+            android:label="@string/title_activity_trip"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
