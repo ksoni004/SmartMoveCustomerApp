@@ -4,18 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.data.remote.model.Place;
+import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.DropFragment;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.OrderRequestFragment;
+import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PaymentFragment;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PickupFragment;
+import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.SummaryFragment;
 
 public class OrderRequestActivity extends BaseActivity
         implements OrderRequestFragment.OrderRequestActionListener,
-        PickupFragment.PickUpActionListener, DropFragment.DropActionListener {
+        PickupFragment.PickUpActionListener, DropFragment.DropActionListener,
+        SummaryFragment.SummaryActionListener, PaymentFragment.PaymentActionListener {
 
     private int runningOrderState = OrderState.INTIAL_SCREEN;
     private Order order;
@@ -111,5 +116,32 @@ public class OrderRequestActivity extends BaseActivity
 
         attachFragment(OrderFactory.getFragmentForState(runningOrderState), R.id.frm_fragment_container);
         getSupportActionBar().setTitle(OrderFactory.getTitleForState(runningOrderState));
+    }
+
+    @Override
+    public Order providePlacedOrder() {
+        return order;
+    }
+
+    @Override
+    public void onNextOfSummaryClick() {
+        runningOrderState = OrderState.PAYMENT;
+
+        attachFragment(OrderFactory.getFragmentForState(runningOrderState), R.id.frm_fragment_container);
+        getSupportActionBar().setTitle(OrderFactory.getTitleForState(runningOrderState));
+    }
+
+    @Override
+    public void onNextOfPaymentClick() {
+        new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
+                .setTitle("Your order has been placed.")
+                .setMessage("We will notify you once someone bids for your order.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    order.setStatus("Pending");
+                    OrderRepository.storeOrder(order);
+                    dialog.dismiss();
+                    finish();
+                })
+                .show();
     }
 }

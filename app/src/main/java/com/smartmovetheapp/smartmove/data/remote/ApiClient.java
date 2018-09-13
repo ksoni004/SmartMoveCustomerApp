@@ -12,7 +12,7 @@ public class ApiClient {
 
     public static AppApi create() { return create(HttpUrl.parse(BASE_URL)); }
 
-    private static final String BASE_URL = "http://13.232.125.97:8080/questionnaire/";
+    private static final String BASE_URL = "http://537a50ce.ngrok.io/";
 
     private static AppApi create(HttpUrl httpUrl) {
         HttpLoggingInterceptor logger = new HttpLoggingInterceptor(

@@ -14,6 +14,8 @@ public class Order {
 
     private String noOfTrips;
 
+    private String status;
+
     public Place getPickupPlace() {
         return pickupPlace;
     }
@@ -60,5 +62,13 @@ public class Order {
 
     public void setNoOfTrips(String noOfTrips) {
         this.noOfTrips = noOfTrips;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

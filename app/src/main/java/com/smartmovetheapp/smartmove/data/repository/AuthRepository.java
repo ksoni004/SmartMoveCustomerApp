@@ -19,7 +19,7 @@ public class AuthRepository {
     }
 
     public Call<LoginResponse> attemptLogin(String username, String password) {
-        return ApiClient.create().login(new User(/*username, password*/));
+        return ApiClient.create().login(new User(username, password, "C"));
     }
 
     public Call<LoginResponse> registerNewUser(User user) { return ApiClient.create().signup(user); }

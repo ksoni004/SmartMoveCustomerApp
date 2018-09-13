@@ -28,8 +28,8 @@ public class OrderRequestFragment extends Fragment {
     private CardView cvPickup;
     private CardView cvDrop;
     private CardView cvDateTime;
-    private TextView txtPickup;
-    private TextView txtDrop;
+    private EditText edtPickup;
+    private EditText edtDrop;
     private TextView txtDateTime;
     private AppCompatSpinner spTruckType;
     private EditText edtTripCount;
@@ -56,8 +56,8 @@ public class OrderRequestFragment extends Fragment {
         cvPickup = view.findViewById(R.id.cv_pickup);
         cvDrop = view.findViewById(R.id.cv_destination);
         cvDateTime = view.findViewById(R.id.cv_date_time);
-        txtPickup = view.findViewById(R.id.txt_pickup_value);
-        txtDrop = view.findViewById(R.id.txt_destination_value);
+        edtPickup = view.findViewById(R.id.edt_pickup_value);
+        edtDrop = view.findViewById(R.id.edt_destination_value);
         txtDateTime = view.findViewById(R.id.txt_date_time);
         spTruckType = view.findViewById(R.id.sp_truck_type);
         edtTripCount = view.findViewById(R.id.edt_trip_count);
@@ -79,8 +79,8 @@ public class OrderRequestFragment extends Fragment {
         try {
             validateInput();
             actionListener.onNextOfOrderClick(
-                    "",
-                    "",
+                    edtPickup.getText().toString(),
+                    edtDrop.getText().toString(),
                     orderDateTime,
                     getResources().getStringArray(R.array.truck_type_values)[spTruckType.getSelectedItemPosition()],
                     edtTripCount.getText().toString()
@@ -128,7 +128,7 @@ public class OrderRequestFragment extends Fragment {
                 R.style.SMDatePickerTheme,
                 (view, hourOfDay, minute) -> {
                     storeSelectedTime(hourOfDay, minute);
-                    txtDateTime.setText(CalenderUtil.getDisplayDateInLongerFormat(orderDateTime) + " " + CalenderUtil.getDisplayDateTime(orderDateTime));
+                    txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderDateTime));
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),
                 calendar.get(Calendar.MINUTE),
