@@ -17,6 +17,8 @@ import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
 import com.smartmovetheapp.smartmove.data.repository.AuthRepository;
 import com.smartmovetheapp.smartmove.ui.home.HomeActivity;
 
+import java.net.HttpURLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +49,11 @@ public class LoginActivity extends AppCompatActivity {
                     showError("Please try again we are facing some issue");
                 }
             } else {
-                showError("Please try again we are facing some issue");
+                if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
+                    showError("Invalid username/password");
+                } else {
+                    showError("Please try again we are facing some issue");
+                }
             }
         }
     };
@@ -99,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
             validateFields();
             showLoading();
             performServerCall();
-            moveToHomeScreen(); //todo: remove once login call implemented
+            //moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
