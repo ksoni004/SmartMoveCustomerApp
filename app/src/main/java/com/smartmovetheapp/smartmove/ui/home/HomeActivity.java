@@ -82,13 +82,10 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_trips) {
             TripActivity.start(this);
-        } else if (id == R.id.nav_wallet) {
-
         } else if (id == R.id.nav_invite) {
 
         } else if (id == R.id.nav_help) {
-            Intent helpActivity = new Intent(this, HelpActivity.class);
-            startActivity(helpActivity);
+            HelpActivity.start(this);
         } else if (id == R.id.nav_notifications) {
 
         } else if (id == R.id.nav_settings) {

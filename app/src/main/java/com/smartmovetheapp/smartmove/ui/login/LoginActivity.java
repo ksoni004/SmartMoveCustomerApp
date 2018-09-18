@@ -8,7 +8,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
@@ -26,7 +25,6 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private CardView cvSignInButton;
-    private Button btnSignup;
     private EditText edtUsername;
     private EditText edtPassword;
     private ProgressBar pbLoading;
@@ -41,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
             hideLoading();
+            moveToHomeScreen(); //todo: remove this - used for skipping Login API call
             if (response.isSuccessful() && response.body() != null) {
                 if (response.body() != null) {
                     //SessionRepository.instance().storeUser(response.body());
@@ -50,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             } else {
                 if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
-                    showError("Invalid username/password");
+                    showError("Invalid email/password");
                 } else {
                     showError("Please try again we are facing some issue");
                 }
@@ -69,13 +68,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         cvSignInButton = findViewById(R.id.cv_sign_in_button);
-        btnSignup = findViewById(R.id.btn_sign_up);
         edtUsername = findViewById(R.id.edt_username);
         edtPassword = findViewById(R.id.edt_password);
         pbLoading = findViewById(R.id.login_progress);
 
         cvSignInButton.setOnClickListener(button -> attemptLogin());
-        //btnSignup.setOnClickListener(button -> RegisterActivity.start(this));
     }
 
     private void showLoading() {
@@ -83,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
         edtUsername.setEnabled(false);
         edtPassword.setEnabled(false);
         cvSignInButton.setEnabled(false);
-        btnSignup.setEnabled(false);
     }
 
     private void hideLoading() {
@@ -91,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
         edtUsername.setEnabled(true);
         edtPassword.setEnabled(true);
         cvSignInButton.setEnabled(true);
-        btnSignup.setEnabled(true);
     }
 
     private void showError(String error) {
@@ -113,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validateFields() throws IllegalArgumentException {
         if (edtUsername.getText().toString().trim().isEmpty()) {
-            throw new IllegalArgumentException(getString(R.string.empty_username));
+            throw new IllegalArgumentException(getString(R.string.empty_email));
         }
 
         if (edtPassword.getText().toString().trim().isEmpty()) {

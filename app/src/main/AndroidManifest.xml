@@ -39,6 +39,10 @@
             android:name=".ui.trips.TripActivity"
             android:label="@string/title_activity_trip"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDDFOYknCWEYKwswIOpYTBUKkZHZhes8wo" />
     </application>
 
 </manifest>

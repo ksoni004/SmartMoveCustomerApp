@@ -1,5 +1,7 @@
 package com.smartmovetheapp.smartmove.ui.help;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ExpandableListAdapter;
@@ -7,7 +9,7 @@ import android.widget.ExpandableListView;
 
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.ui.help.adapter.CustomExpandableListAdapter;
-import com.smartmovetheapp.smartmove.data.HelpDataPupm;
+import com.smartmovetheapp.smartmove.data.HelpDataPump;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,9 +27,14 @@ public class HelpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-        expandableListDetail = HelpDataPupm.getData();
+        expandableListDetail = HelpDataPump.getData();
         expandableListTitle = new ArrayList<>(expandableListDetail.keySet());
         expandableListAdapter = new CustomExpandableListAdapter(this, expandableListTitle, expandableListDetail);
         expandableListView.setAdapter(expandableListAdapter);
+    }
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, HelpActivity.class);
+        context.startActivity(starter);
     }
 }

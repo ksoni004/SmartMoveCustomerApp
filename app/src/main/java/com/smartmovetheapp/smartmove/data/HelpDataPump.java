@@ -2,7 +2,7 @@ package com.smartmovetheapp.smartmove.data;
 
 import java.util.HashMap;
 
-public class HelpDataPupm {
+public class HelpDataPump {
     public static HashMap<String, String> getData() {
         HashMap<String, String> helpDataMap = new HashMap<String, String>();
 

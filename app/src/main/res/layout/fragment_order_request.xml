@@ -23,8 +23,14 @@
             style="@style/SMTextView.FieldHeader"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:text="Pick-Up Destination" />
+            android:text="Pick-Up Location" />
 
+        <!--<fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />-->
         <EditText
             android:id="@+id/edt_pickup_value"
             android:layout_width="match_parent"
@@ -56,7 +62,7 @@
             style="@style/SMTextView.FieldHeader"
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:text="Drop Destination" />
+            android:text="Drop Location" />
 
         <EditText
             android:id="@+id/edt_destination_value"
