@@ -2,27 +2,27 @@ package com.smartmovetheapp.smartmove.data.remote.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+public class Customer {
 
     @SerializedName("email")
-    private String username;
+    private String email;
 
     private String password;
 
     private String accountType;
 
-    public User(String username, String password, String accountType) {
-        this.username = username;
+    public Customer(String email, String password, String accountType) {
+        this.email = email;
         this.password = password;
         this.accountType = accountType;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

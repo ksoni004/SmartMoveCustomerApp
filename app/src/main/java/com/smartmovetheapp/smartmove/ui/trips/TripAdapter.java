@@ -60,10 +60,10 @@ public class TripAdapter extends ListAdapter<Order, TripAdapter.ViewHolder> {
         }
 
         public void bindTo(Order order) {
-            txtPickup.setText(order.getPickupPlace().getLocationName());
-            txtDrop.setText(order.getDropPlace().getLocationName());
+            txtPickup.setText(order.getPickupPlace());
+            txtDrop.setText(order.getDropPlace());
             txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
-            txtStatus.setText(order.getStatus());
+            txtStatus.setText(order.getOrderStatus());
         }
     }
 }

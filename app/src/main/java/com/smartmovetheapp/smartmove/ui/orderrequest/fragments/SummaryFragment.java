@@ -10,15 +10,11 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
-import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
-
-import org.w3c.dom.Text;
 
 public class SummaryFragment extends Fragment {
 
@@ -96,27 +92,27 @@ public class SummaryFragment extends Fragment {
     }
 
     private void populateOrder(Order order) {
-        txtPickupPlace.setText(order.getPickupPlace().getLocationName());
-        txtDropPlace.setText(order.getDropPlace().getLocationName());
+        txtPickupPlace.setText(order.getPickupPlace());
+        txtDropPlace.setText(order.getDropPlace());
         txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
-        txtTruckType.setText(order.getTruckType());
-        txtTripCount.setText(order.getNoOfTrips());
+        txtTruckType.setText(String.valueOf(order.getTruckTypeId()));
+        txtTripCount.setText(String.valueOf(order.getEstimatedNumOfTrips()));
 
-        txtFloorLevel.setText(order.getPickupPlace().getFloorLevel());
-        swtElevator.setChecked(order.getPickupPlace().isElevator());
+        txtFloorLevel.setText(order.getPickupFloor());
+        swtElevator.setChecked(order.isPickupHasElevator());
         swtElevator.setEnabled(false);
-        txtParkingDistance.setText(order.getPickupPlace().getParkingDistance());
-        txtWeight.setText(order.getPickupPlace().getWeight());
-        txtArea.setText(order.getPickupPlace().getArea());
-        txtExtra.setText(order.getPickupPlace().getAdditionalInfo());
+        txtParkingDistance.setText(order.getPickupDistanceFromParking());
+        txtWeight.setText(order.getEstimatedWeight());
+        txtArea.setText(order.getEstimatedArea());
+        txtExtra.setText(order.getPickupAdditionalInfo());
 
-        txtFloorLevelD.setText(order.getDropPlace().getFloorLevel());
-        swtElevatorD.setChecked(order.getDropPlace().isElevator());
+        txtFloorLevelD.setText(order.getDropFloor());
+        swtElevatorD.setChecked(order.isDropHasElevator());
         swtElevatorD.setEnabled(false);
-        txtParkingDistanceD.setText(order.getDropPlace().getParkingDistance());
-        txtWeightD.setText(order.getDropPlace().getWeight());
-        txtAreaD.setText(order.getDropPlace().getArea());
-        txtExtraD.setText(order.getDropPlace().getAdditionalInfo());
+        txtParkingDistanceD.setText(order.getDropDistanceFromParking());
+        txtWeightD.setText(order.getEstimatedWeight());
+        txtAreaD.setText(order.getEstimatedArea());
+        txtExtraD.setText(order.getDropAdditionalInfo());
     }
 
     private void onNextClick() {

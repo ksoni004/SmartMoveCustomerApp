@@ -5,14 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 
 /*import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;*/
 import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
-import com.smartmovetheapp.smartmove.data.remote.model.Place;
+import com.smartmovetheapp.smartmove.data.repository.AuthRepository;
 import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.DropFragment;
@@ -20,6 +22,17 @@ import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.OrderRequestFragm
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PaymentFragment;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PickupFragment;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.SummaryFragment;
+
+import java.net.HttpURLConnection;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderRequestActivity extends BaseActivity
         implements OrderRequestFragment.OrderRequestActionListener,
@@ -96,12 +109,13 @@ public class OrderRequestActivity extends BaseActivity
 
     @Override
     public void onNextOfOrderClick(String pickup, String drop, long dateTime, String truckType, String tripCount) {
-        order.setPickupPlace(new Place(pickup));
-        order.setDropPlace(new Place(drop));
+        order.setPickupPlace(pickup);
+        order.setDropPlace(drop);
         order.setDate(dateTime);
         order.setTime(dateTime);
-        order.setTruckType(truckType);
-        order.setNoOfTrips(tripCount);
+        int truckTypeId = truckType.equals("Standard Car")? 1 : truckType.equals("Pickup Truck")? 2 : 3;
+        order.setTruckTypeId(truckTypeId);
+        order.setEstimatedNumOfTrips(Integer.parseInt(tripCount));
 
         runningOrderState = OrderState.PICK_UP_PLACE;
 
@@ -111,12 +125,12 @@ public class OrderRequestActivity extends BaseActivity
 
     @Override
     public void onNextOfPickupClick(String floorLevel, boolean elevator, String parkingDistance, String weight, String area, String extra) {
-        order.getPickupPlace().setFloorLevel(floorLevel);
-        order.getPickupPlace().setElevator(elevator);
-        order.getPickupPlace().setParkingDistance(parkingDistance);
-        order.getPickupPlace().setWeight(weight);
-        order.getPickupPlace().setArea(area);
-        order.getPickupPlace().setAdditionalInfo(extra);
+        order.setPickupFloor(floorLevel);
+        order.setPickupHasElevator(elevator);
+        order.setPickupDistanceFromParking(parkingDistance);
+        order.setEstimatedWeight(weight);
+        order.setEstimatedArea(area);
+        order.setPickupAdditionalInfo(extra);
 
         runningOrderState = OrderState.DROP_PLACE;
 
@@ -126,12 +140,12 @@ public class OrderRequestActivity extends BaseActivity
 
     @Override
     public void onNextOfDropClick(String floorLevel, boolean elevator, String parkingDistance, String weight, String area, String extra) {
-        order.getDropPlace().setFloorLevel(floorLevel);
-        order.getDropPlace().setElevator(elevator);
-        order.getDropPlace().setParkingDistance(parkingDistance);
-        order.getDropPlace().setWeight(weight);
-        order.getDropPlace().setArea(area);
-        order.getDropPlace().setAdditionalInfo(extra);
+        order.setDropFloor(floorLevel);
+        order.setDropHasElevator(elevator);
+        order.setDropDistanceFromParking(parkingDistance);
+        order.setEstimatedWeight(weight);
+        order.setEstimatedArea(area);
+        order.setDropAdditionalInfo(extra);
 
         runningOrderState = OrderState.SUMMARY;
 
@@ -154,15 +168,57 @@ public class OrderRequestActivity extends BaseActivity
 
     @Override
     public void onNextOfPaymentClick() {
+        performServerCall(providePlacedOrder());
         new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
                 .setTitle("Your order has been placed.")
                 .setMessage("We will notify you once someone bids for your order.")
                 .setPositiveButton("OK", (dialog, which) -> {
-                    order.setStatus("Pending");
+                    order.setOrderStatus("Pending");
                     OrderRepository.storeOrder(order);
                     dialog.dismiss();
                     finish();
                 })
                 .show();
     }
+
+    private void performServerCall(Order orderDTO) {
+        Date date = new Date();
+        orderDTO.setOrderDateTime(new Timestamp(date.getTime()));
+        orderDTO.setCustomerId(2);
+        orderDTO.setPickupLat(1.11);
+        orderDTO.setPickupLong(2.22);
+        orderDTO.setDropLat(3.33);
+        orderDTO.setDropLong(4.44);
+        orderDTO.setOrderStatus("PENDING");
+        OrderRepository.getInstance().attemptCreateOrder(orderDTO).enqueue(createOrderCallback);
+    }
+
+    private final Callback<Order> createOrderCallback = new Callback<Order>() {
+        @Override
+        public void onFailure(Call<Order> call, Throwable t) {
+            Log.d("==AAAA1==", t.getLocalizedMessage());
+            Log.d("==AAAA2==", t.getMessage());
+            showError("Please try again we are facing some issue" + t.getMessage());
+        }
+
+        @Override
+        public void onResponse(Call<Order> call, Response<Order> response) {
+            if (response.isSuccessful() && response.body() != null) {
+                if (response.body() != null) {
+                    //Successs
+
+                    Log.d("OrderDTO", response.body().toString());
+                    showError("Aaala" + response.body().getCustomerId());
+                } else {
+                    showError("Please try try again we are facing some issue");
+                }
+            } else {
+                if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
+                    showError("Bad request error");
+                } else {
+                    showError("Other error code");
+                }
+            }
+        }
+    };
 }
