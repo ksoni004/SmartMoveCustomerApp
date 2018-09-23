@@ -6,11 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.ApiClient;
+import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 
 import java.util.List;
@@ -25,19 +29,29 @@ public class BidsActivity extends BaseActivity {
 
     private int orderId;
     private Snackbar loadingSnackbar;
-    private final Callback<Void> bidsCallback = new Callback<Void>() {
+    private final Callback<List<OrderBid>> bidsCallback = new Callback<List<OrderBid>>() {
         @Override
-        public void onResponse(Call<Void> call, Response<Void> response) {
+        public void onResponse(Call<List<OrderBid>> call, Response<List<OrderBid>> response) {
             hideLoading();
+            if (response.isSuccessful()) {
+                loadBids(response.body());
+            } else {
+                showError(R.string.default_error);
+            }
         }
 
         @Override
-        public void onFailure(Call<Void> call, Throwable t) {
+        public void onFailure(Call<List<OrderBid>> call, Throwable t) {
             hideLoading();
+            showError(R.string.default_error);
         }
     };
+    private TextView txtEmptyTrips;
+    private RecyclerView rvTrips;
+    private BidAdapter bidAdapter;
 
     public static void start(Context context, int orderId) {
+        Log.d("BidsActivity", "start: called");
         Intent starter = new Intent(context, BidsActivity.class);
         starter.putExtra(ORDER_ID_EXTRA, orderId);
         context.startActivity(starter);
@@ -45,6 +59,7 @@ public class BidsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d("BidsActivity", "onCreate: called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bids);
 
@@ -59,15 +74,16 @@ public class BidsActivity extends BaseActivity {
         attachToolbar(toolbar, true);
 
         loadingSnackbar = Snackbar.make(findViewById(android.R.id.content),
-                "Getting active trips..", Snackbar.LENGTH_INDEFINITE);
+                "Getting received bids..", Snackbar.LENGTH_INDEFINITE);
 
-        /*rvTrips = findViewById(R.id.rv_trips);
+        rvTrips = findViewById(R.id.rv_bids);
         txtEmptyTrips = findViewById(R.id.txt_empty_trips);
 
         rvTrips.setLayoutManager(new LinearLayoutManager(this));
-        tripAdapter = new TripAdapter(order ->
-                TripDetailActivity.start(this, order));
-        rvTrips.setAdapter(tripAdapter);*/
+        bidAdapter = new BidAdapter(orderBid -> {
+
+        });
+        rvTrips.setAdapter(bidAdapter);
 
         performServerCall();
     }
@@ -78,13 +94,13 @@ public class BidsActivity extends BaseActivity {
                 .enqueue(bidsCallback);
     }
 
-    /*private void loadBids(List<Order> trips) {
-        if (trips == null || trips.isEmpty()) {
+    private void loadBids(List<OrderBid> bids) {
+        if (bids == null || bids.isEmpty()) {
             txtEmptyTrips.setVisibility(View.VISIBLE);
         } else {
-            tripAdapter.submitList(trips);
+            bidAdapter.submitList(bids);
         }
-    }*/
+    }
 
     private void showLoading() {
         loadingSnackbar.show();

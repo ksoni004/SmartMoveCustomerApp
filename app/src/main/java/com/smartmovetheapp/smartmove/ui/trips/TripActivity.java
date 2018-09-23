@@ -28,6 +28,7 @@ import com.smartmovetheapp.smartmove.data.remote.model.TripResponse;
 import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
 import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PaymentFragment;
 import com.smartmovetheapp.smartmove.ui.tripdetail.TripDetailActivity;
 
 import java.util.List;
@@ -202,6 +203,23 @@ public class TripActivity extends BaseActivity {
                 tripAdapter.submitList(orders);
             }*/
         }
+
+        /*@Override
+        public void onAttach(Context context) {
+            super.onAttach(context);
+            if (context instanceof FragmentContract) {
+                contract = (FragmentContract) context;
+            } else {
+                throw new RuntimeException(context.toString()
+                        + " must implement FragmentContract");
+            }
+        }
+
+        @Override
+        public void onDetach() {
+            super.onDetach();
+            contract = null;
+        }*/
     }
 
     /**
@@ -218,9 +236,7 @@ public class TripActivity extends BaseActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1,
-                    pageNo -> pageNo == 1 ? currentOrders : pastOrders
-            );
+            return PlaceholderFragment.newInstance(position + 1, pageNo -> pageNo == 1 ? currentOrders : pastOrders);
         }
 
         @Override

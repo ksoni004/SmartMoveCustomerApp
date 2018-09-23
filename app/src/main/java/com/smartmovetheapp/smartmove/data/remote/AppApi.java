@@ -1,9 +1,12 @@
 package com.smartmovetheapp.smartmove.data.remote;
 
 import com.smartmovetheapp.smartmove.data.remote.model.Customer;
+import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmove.data.remote.model.User;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.data.remote.model.TripResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -24,7 +27,7 @@ public interface AppApi {
     Call<TripResponse> getTrips(@Query("customerId") Long customerId);
 
     @GET("api/Customer/GetOrderBids")
-    Call<Void> getBids(@Query("orderId") int orderId);
+    Call<List<OrderBid>> getBids(@Query("orderId") int orderId);
 
     /*Get Order Bids:
 api/Customer/GetOrderBids?orderId=value
