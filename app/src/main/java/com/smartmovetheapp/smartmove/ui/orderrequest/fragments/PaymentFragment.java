@@ -46,7 +46,7 @@ public class PaymentFragment extends Fragment {
     }
 
     private void onNextClick() {
-        AlertDialog loading = new AlertDialog.Builder(getContext(), R.style.SMDatePickerTheme)
+        /*AlertDialog loading = new AlertDialog.Builder(getContext(), R.style.SMDatePickerTheme)
                 .setMessage("Transaction in progress..")
                 .create();
 
@@ -55,7 +55,8 @@ public class PaymentFragment extends Fragment {
                 .postDelayed(() -> {
                     loading.dismiss();
                     actionListener.onNextOfPaymentClick();
-                }, 3000L);
+                }, 3000L);*/
+        actionListener.onNextOfPaymentClick();
     }
 
 

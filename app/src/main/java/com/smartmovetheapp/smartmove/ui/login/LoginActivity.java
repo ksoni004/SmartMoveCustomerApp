@@ -99,8 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             validateFields();
             showLoading();
-            performServerCall();
-            //moveToHomeScreen(); //todo: remove once login call implemented
+            //performServerCall();
+            moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         ).enqueue(loginCallback);
     }
 
-    private void moveToHomeScreen() {
+    private void  moveToHomeScreen() {
         finish();
         HomeActivity.start(this);
     }

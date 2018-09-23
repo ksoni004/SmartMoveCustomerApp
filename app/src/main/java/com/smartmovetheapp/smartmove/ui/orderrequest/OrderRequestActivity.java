@@ -41,6 +41,7 @@ public class OrderRequestActivity extends BaseActivity
 
     private int runningOrderState = OrderState.INTIAL_SCREEN;
     private Order order;
+    AlertDialog loading;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, OrderRequestActivity.class);
@@ -51,6 +52,11 @@ public class OrderRequestActivity extends BaseActivity
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_request);
+
+        loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
+                .setMessage("Creating your order..")
+                .setCancelable(false)
+                .create();
 
         order = new Order();
 
@@ -168,17 +174,16 @@ public class OrderRequestActivity extends BaseActivity
 
     @Override
     public void onNextOfPaymentClick() {
+        showLoading();
         performServerCall(providePlacedOrder());
-        new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
-                .setTitle("Your order has been placed.")
-                .setMessage("We will notify you once someone bids for your order.")
-                .setPositiveButton("OK", (dialog, which) -> {
-                    order.setOrderStatus("Pending");
-                    OrderRepository.storeOrder(order);
-                    dialog.dismiss();
-                    finish();
-                })
-                .show();
+    }
+
+    private void showLoading() {
+        loading.show();
+    }
+
+    private void hideLoading() {
+        loading.dismiss();
     }
 
     private void performServerCall(Order orderDTO) {
@@ -198,17 +203,29 @@ public class OrderRequestActivity extends BaseActivity
         public void onFailure(Call<Order> call, Throwable t) {
             Log.d("==AAAA1==", t.getLocalizedMessage());
             Log.d("==AAAA2==", t.getMessage());
-            showError("Please try again we are facing some issue" + t.getMessage());
+            hideLoading();
+            showError("Please try again we are facing some issue");
         }
 
         @Override
         public void onResponse(Call<Order> call, Response<Order> response) {
+            hideLoading();
             if (response.isSuccessful() && response.body() != null) {
                 if (response.body() != null) {
                     //Successs
-
+                    new AlertDialog.Builder(OrderRequestActivity.this, R.style.SMDatePickerTheme)
+                            .setTitle("Your order has been placed.")
+                            .setMessage("We will notify you once someone bids for your order.")
+                            .setCancelable(false)
+                            .setPositiveButton("OK", (dialog, which) -> {
+                                order.setOrderStatus("Pending");
+                                OrderRepository.storeOrder(order);
+                                dialog.dismiss();
+                                finish();
+                            })
+                            .show();
                     Log.d("OrderDTO", response.body().toString());
-                    showError("Aaala" + response.body().getCustomerId());
+                    //showError("Aaala" + response.body().getCustomerId());
                 } else {
                     showError("Please try try again we are facing some issue");
                 }

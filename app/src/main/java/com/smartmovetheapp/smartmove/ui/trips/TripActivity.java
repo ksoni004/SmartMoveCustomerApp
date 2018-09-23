@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +16,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -53,6 +49,9 @@ public class TripActivity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    private List<Order> currentOrders;
+    private List<Order> pastOrders;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,12 +65,24 @@ public class TripActivity extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //set when server call completes
+        //mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+
+        performServerCallToGetOrders();
+    }
+
+    private void performServerCallToGetOrders() {
+        //dummy data
+        currentOrders = OrderRepository.getStoredListOfOrder();
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //todo: implement server call
     }
 
     /**
@@ -81,6 +92,7 @@ public class TripActivity extends AppCompatActivity {
 
         private RecyclerView rvTrips;
         private TextView txtEmptyTrips;
+        private FragmentContract contract;
 
         /**
          * The fragment argument representing the section number for this
@@ -95,11 +107,12 @@ public class TripActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
+        public static PlaceholderFragment newInstance(int sectionNumber, FragmentContract contract) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
+            fragment.contract = contract;
             return fragment;
         }
 
@@ -125,7 +138,14 @@ public class TripActivity extends AppCompatActivity {
             TripAdapter tripAdapter = new TripAdapter();
             rvTrips.setAdapter(tripAdapter);
 
-            if (getArguments().getInt(ARG_SECTION_NUMBER, 1) == 2) {
+            List<Order> orders = contract.getOrders(getArguments().getInt(ARG_SECTION_NUMBER, 1));
+            if (orders == null || orders.isEmpty()) {
+                txtEmptyTrips.setVisibility(View.VISIBLE);
+            } else {
+                tripAdapter.submitList(orders);
+            }
+
+            /*if (getArguments().getInt(ARG_SECTION_NUMBER, 1) == 2) {
                 txtEmptyTrips.setVisibility(View.VISIBLE);
                 return;
             }
@@ -135,7 +155,7 @@ public class TripActivity extends AppCompatActivity {
                 txtEmptyTrips.setVisibility(View.VISIBLE);
             } else {
                 tripAdapter.submitList(orders);
-            }
+            }*/
         }
     }
 
@@ -153,7 +173,9 @@ public class TripActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position + 1,
+                    pageNo -> pageNo == 1 ? currentOrders : pastOrders
+            );
         }
 
         @Override
@@ -161,5 +183,9 @@ public class TripActivity extends AppCompatActivity {
             // Show 2 total pages.
             return 2;
         }
+    }
+
+    public interface FragmentContract {
+        List<Order> getOrders(int pageNo);
     }
 }
