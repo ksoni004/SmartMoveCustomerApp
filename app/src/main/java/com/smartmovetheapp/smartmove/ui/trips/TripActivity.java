@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,12 +21,40 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
+import com.smartmovetheapp.smartmove.data.remote.model.TripResponse;
 import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
+import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmove.ui.tripdetail.TripDetailActivity;
 
 import java.util.List;
 
-public class TripActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class TripActivity extends BaseActivity {
+
+    private final Callback<TripResponse> tripCallback = new Callback<TripResponse>() {
+        @Override
+        public void onResponse(Call<TripResponse> call, Response<TripResponse> response) {
+            if (response.isSuccessful() && response.body() != null) {
+                currentOrders = response.body().getRunningOrders();
+                pastOrders =  response.body().getCompletedOrders();
+
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<TripResponse> call, Throwable t) {
+            showError(R.string.default_error);
+        }
+    };
 
     public static void start(Context context) {
         Intent starter = new Intent(context, TripActivity.class);
@@ -79,10 +106,11 @@ public class TripActivity extends AppCompatActivity {
 
     private void performServerCallToGetOrders() {
         //dummy data
-        currentOrders = OrderRepository.getStoredListOfOrder();
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        //currentOrders = OrderRepository.getStoredListOfOrder();
+        //mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        //todo: implement server call
+        ApiClient.create().getTrips(Long.valueOf(SessionRepository.getInstance().getCustomerId()))
+                .enqueue(tripCallback);
     }
 
     /**
@@ -135,7 +163,8 @@ public class TripActivity extends AppCompatActivity {
             super.onActivityCreated(savedInstanceState);
 
             rvTrips.setLayoutManager(new LinearLayoutManager(getContext()));
-            TripAdapter tripAdapter = new TripAdapter();
+            TripAdapter tripAdapter = new TripAdapter(order ->
+                    TripDetailActivity.start(getContext(), order));
             rvTrips.setAdapter(tripAdapter);
 
             List<Order> orders = contract.getOrders(getArguments().getInt(ARG_SECTION_NUMBER, 1));

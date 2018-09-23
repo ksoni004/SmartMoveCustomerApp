@@ -27,8 +27,11 @@ public class TripAdapter extends ListAdapter<Order, TripAdapter.ViewHolder> {
         }
     };
 
-    protected TripAdapter() {
+    private ActionListener actionListener;
+
+    protected TripAdapter(ActionListener actionListener) {
         super(DIFF_CALLBACK);
+        this.actionListener = actionListener;
     }
 
     @NonNull
@@ -45,6 +48,7 @@ public class TripAdapter extends ListAdapter<Order, TripAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private final View root;
         private TextView txtPickup;
         private TextView txtDrop;
         private TextView txtDateTime;
@@ -53,17 +57,29 @@ public class TripAdapter extends ListAdapter<Order, TripAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
+            root = itemView;
             txtPickup = itemView.findViewById(R.id.txt_pickup_dest);
             txtDrop = itemView.findViewById(R.id.txt_drop_dest);
             txtDateTime = itemView.findViewById(R.id.txt_date_time);
             txtStatus = itemView.findViewById(R.id.txt_status);
+
+            root.setOnClickListener(button -> {
+                Order order = (Order) button.getTag();
+                actionListener.onOrderClick(order);
+            });
         }
 
         public void bindTo(Order order) {
+            root.setTag(order);
+
             txtPickup.setText(order.getPickupPlace());
             txtDrop.setText(order.getDropPlace());
             txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
             txtStatus.setText(order.getOrderStatus());
         }
+    }
+
+    public interface ActionListener {
+        void onOrderClick(Order order);
     }
 }

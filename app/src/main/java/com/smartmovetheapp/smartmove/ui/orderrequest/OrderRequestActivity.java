@@ -16,12 +16,10 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;*/
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
-import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.smartmovetheapp.smartmove.R;
-import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
-import com.smartmovetheapp.smartmove.data.repository.AuthRepository;
 import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.DropFragment;
 import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.OrderRequestFragment;
@@ -31,11 +29,8 @@ import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.SummaryFragment;
 
 import java.net.HttpURLConnection;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -204,14 +199,14 @@ public class OrderRequestActivity extends BaseActivity
     private void performServerCall(Order orderDTO) {
         Date date = new Date();
         orderDTO.setOrderDateTime(new Timestamp(date.getTime()));
-        orderDTO.setCustomerId(2);
+        orderDTO.setCustomerId(SessionRepository.getInstance().getCustomerId());
         orderDTO.setOrderStatus("PENDING");
         OrderRepository.getInstance().attemptCreateOrder(orderDTO).enqueue(createOrderCallback);
     }
 
-    private final Callback<Order> createOrderCallback = new Callback<Order>() {
+    private final Callback<Void> createOrderCallback = new Callback<Void>() {
         @Override
-        public void onFailure(Call<Order> call, Throwable t) {
+        public void onFailure(Call<Void> call, Throwable t) {
             Log.d("==AAAA1==", t.getLocalizedMessage());
             Log.d("==AAAA2==", t.getMessage());
             hideLoading();
@@ -219,27 +214,21 @@ public class OrderRequestActivity extends BaseActivity
         }
 
         @Override
-        public void onResponse(Call<Order> call, Response<Order> response) {
+        public void onResponse(Call<Void> call, Response<Void> response) {
             hideLoading();
-            if (response.isSuccessful() && response.body() != null) {
-                if (response.body() != null) {
-                    //Successs
-                    new AlertDialog.Builder(OrderRequestActivity.this, R.style.SMDatePickerTheme)
-                            .setTitle("Your order has been placed.")
-                            .setMessage("We will notify you once someone bids for your order.")
-                            .setCancelable(false)
-                            .setPositiveButton("OK", (dialog, which) -> {
-                                order.setOrderStatus("Pending");
-                                OrderRepository.storeOrder(order);
-                                dialog.dismiss();
-                                finish();
-                            })
-                            .show();
-                    Log.d("OrderDTO", response.body().toString());
-                    //showError("Aaala" + response.body().getCustomerId());
-                } else {
-                    showError("Please try try again we are facing some issue");
-                }
+            if (response.isSuccessful()) {
+                new AlertDialog.Builder(OrderRequestActivity.this, R.style.SMDatePickerTheme)
+                        .setTitle("Your order has been placed.")
+                        .setMessage("We will notify you once someone bids for your order.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            order.setOrderStatus("Pending");
+                            OrderRepository.storeOrder(order);
+                            dialog.dismiss();
+                            finish();
+                        })
+                        .show();
+
             } else {
                 if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
                     showError("Bad request error");

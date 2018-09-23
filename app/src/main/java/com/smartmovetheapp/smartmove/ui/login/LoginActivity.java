@@ -12,8 +12,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.smartmovetheapp.smartmove.R;
-import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
+import com.smartmovetheapp.smartmove.data.remote.model.User;
 import com.smartmovetheapp.smartmove.data.repository.AuthRepository;
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
+import com.smartmovetheapp.smartmove.data.sharedpref.StateMachine;
 import com.smartmovetheapp.smartmove.ui.home.HomeActivity;
 
 import java.net.HttpURLConnection;
@@ -29,20 +31,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText edtPassword;
     private ProgressBar pbLoading;
 
-    private final Callback<LoginResponse> loginCallback = new Callback<LoginResponse>() {
+    private final Callback<User> loginCallback = new Callback<User>() {
         @Override
-        public void onFailure(Call<LoginResponse> call, Throwable t) {
+        public void onFailure(Call<User> call, Throwable t) {
             hideLoading();
             showError("Please try again we are facing some issue");
         }
 
         @Override
-        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+        public void onResponse(Call<User> call, Response<User> response) {
             hideLoading();
-            moveToHomeScreen(); //todo: remove this - used for skipping Login API call
             if (response.isSuccessful() && response.body() != null) {
                 if (response.body() != null) {
-                    //SessionRepository.instance().storeUser(response.body());
+                    SessionRepository.getInstance().storeUser(response.body());
+                    StateMachine.changeStateTo(StateMachine.State.LOGGED_IN);
                     moveToHomeScreen();
                 } else {
                     showError("Please try again we are facing some issue");
@@ -99,8 +101,8 @@ public class LoginActivity extends AppCompatActivity {
         try {
             validateFields();
             showLoading();
-//            performServerCall();
-            moveToHomeScreen(); //todo: remove once login call implemented
+            performServerCall();
+//            moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
         }
