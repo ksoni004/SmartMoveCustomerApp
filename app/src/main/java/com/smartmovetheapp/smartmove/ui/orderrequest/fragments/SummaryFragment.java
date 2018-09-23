@@ -95,24 +95,37 @@ public class SummaryFragment extends Fragment {
         txtPickupPlace.setText(order.getPickupPlace());
         txtDropPlace.setText(order.getDropPlace());
         txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
-        txtTruckType.setText(String.valueOf(order.getTruckTypeId()));
-        txtTripCount.setText(String.valueOf(order.getEstimatedNumOfTrips()));
+        txtTruckType.setText(getTruckTypeText(order.getTruckTypeId()));
+        txtTripCount.setText(order.getEstimatedNumOfTrips() == null ? "--" : String.valueOf(order.getEstimatedNumOfTrips()));
 
         txtFloorLevel.setText(order.getPickupFloor());
         swtElevator.setChecked(order.isPickupHasElevator());
         swtElevator.setEnabled(false);
         txtParkingDistance.setText(order.getPickupDistanceFromParking());
-        txtWeight.setText(order.getEstimatedWeight());
-        txtArea.setText(order.getEstimatedArea());
-        txtExtra.setText(order.getPickupAdditionalInfo());
+        txtWeight.setText(order.getEstimatedWeight().isEmpty() ? "--" : order.getEstimatedWeight());
+        txtArea.setText(order.getEstimatedArea().isEmpty() ? "--" : order.getEstimatedArea());
+        txtExtra.setText(order.getPickupAdditionalInfo().trim().isEmpty() ? "--" : order.getPickupAdditionalInfo());
 
         txtFloorLevelD.setText(order.getDropFloor());
         swtElevatorD.setChecked(order.isDropHasElevator());
         swtElevatorD.setEnabled(false);
         txtParkingDistanceD.setText(order.getDropDistanceFromParking());
-        txtWeightD.setText(order.getEstimatedWeight());
-        txtAreaD.setText(order.getEstimatedArea());
-        txtExtraD.setText(order.getDropAdditionalInfo());
+        //txtWeightD.setText(order.getEstimatedWeight());
+        //txtAreaD.setText(order.getEstimatedArea());
+        txtExtraD.setText(order.getDropAdditionalInfo().trim().isEmpty() ? "--" : order.getDropAdditionalInfo());
+    }
+
+    private String getTruckTypeText(int truckTypeId) {
+        switch (truckTypeId) {
+            case 1:
+                return "Standard Car";
+            case 2:
+                return "Pickup Truck";
+            case 3:
+                return "Cargo Truck";
+            default:
+                return "--";
+        }
     }
 
     private void onNextClick() {

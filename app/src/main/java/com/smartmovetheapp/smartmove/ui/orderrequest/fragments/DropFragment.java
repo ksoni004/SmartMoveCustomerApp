@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.Group;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
@@ -24,6 +25,9 @@ public class DropFragment extends Fragment {
     private EditText edtArea;
     private EditText edtExtra;
     private SwitchCompat swtElevator;
+
+    private Group grpWeightInput;
+    private Group grpAreatInput;
 
     private DropActionListener actionListener;
 
@@ -48,6 +52,12 @@ public class DropFragment extends Fragment {
         edtArea = view.findViewById(R.id.edt_area);
         edtExtra = view.findViewById(R.id.edt_extra);
         swtElevator = view.findViewById(R.id.swt_elevator);
+
+        grpWeightInput = view.findViewById(R.id.grp_weight_input);
+        grpAreatInput = view.findViewById(R.id.grp_area_input);
+
+        grpWeightInput.setVisibility(View.GONE);
+        grpAreatInput.setVisibility(View.GONE);
     }
 
     @Override
@@ -80,7 +90,13 @@ public class DropFragment extends Fragment {
     }
 
     private void validateInput() throws IllegalArgumentException {
+        if (edtFloorLevel.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException("Please enter Floor Level");
+        }
 
+        if (edtParkingDistance.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException("Please enter Distance from Parking");
+        }
     }
 
     @Override

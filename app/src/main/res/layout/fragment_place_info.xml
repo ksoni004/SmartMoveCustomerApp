@@ -114,6 +114,12 @@
                 app:layout_constraintTop_toTopOf="@id/txt_weight_title"
                 app:layout_constraintBottom_toBottomOf="@id/txt_weight_title"/>
 
+            <android.support.constraint.Group
+                android:id="@+id/grp_weight_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="txt_weight_title, edt_weight"/>
+
             <!--area-->
             <TextView
                 android:id="@+id/txt_area_title"
@@ -137,6 +143,12 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/txt_area_title"
                 app:layout_constraintBottom_toBottomOf="@id/txt_area_title"/>
+
+            <android.support.constraint.Group
+                android:id="@+id/grp_area_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="txt_area_title, edt_area"/>
 
             <!--extra-->
             <TextView

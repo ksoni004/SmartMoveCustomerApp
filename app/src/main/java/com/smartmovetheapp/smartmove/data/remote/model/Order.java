@@ -48,7 +48,7 @@ public class Order {
 
     private String dropAdditionalInfo;// Not Mandatory
 
-    private int estimatedNumOfTrips;// Not Mandatory
+    private Integer estimatedNumOfTrips;// Not Mandatory
 
     private String estimatedWeight;// Not Mandatory
 
@@ -232,11 +232,11 @@ public class Order {
         this.dropAdditionalInfo = dropAdditionalInfo;
     }
 
-    public int getEstimatedNumOfTrips() {
+    public Integer getEstimatedNumOfTrips() {
         return estimatedNumOfTrips;
     }
 
-    public void setEstimatedNumOfTrips(int estimatedNumOfTrips) {
+    public void setEstimatedNumOfTrips(Integer estimatedNumOfTrips) {
         this.estimatedNumOfTrips = estimatedNumOfTrips;
     }
 

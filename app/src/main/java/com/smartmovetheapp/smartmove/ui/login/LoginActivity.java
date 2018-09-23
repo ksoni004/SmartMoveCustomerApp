@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             validateFields();
             showLoading();
-            //performServerCall();
+//            performServerCall();
             moveToHomeScreen(); //todo: remove once login call implemented
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());

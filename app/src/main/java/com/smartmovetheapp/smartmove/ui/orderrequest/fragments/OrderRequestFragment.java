@@ -86,12 +86,19 @@ public class OrderRequestFragment extends Fragment {
     private void onNextClick() {
         try {
             validateInput();
+            Integer estimatedNoOfTrips;
+            try {
+                estimatedNoOfTrips = Integer.parseInt(edtTripCount.getText().toString());
+            } catch (NumberFormatException nanError) {
+                estimatedNoOfTrips = null;
+            }
+
             actionListener.onNextOfOrderClick(
                     pickupPlace,
                     dropPlace,
                     orderDateTime,
                     getResources().getStringArray(R.array.truck_type_values)[spTruckType.getSelectedItemPosition()],
-                    edtTripCount.getText().toString()
+                    estimatedNoOfTrips
             );
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
@@ -229,6 +236,6 @@ public class OrderRequestFragment extends Fragment {
 
         void hideLocationSearch();
 
-        void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, String tripCount);
+        void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, Integer tripCount);
     }
 }

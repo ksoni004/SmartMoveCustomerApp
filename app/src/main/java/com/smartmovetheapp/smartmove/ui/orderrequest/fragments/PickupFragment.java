@@ -64,9 +64,9 @@ public class PickupFragment extends Fragment {
                     edtFloorLevel.getText().toString(),
                     swtElevator.isChecked(),
                     edtParkingDistance.getText().toString(),
-                    edtWeight.getText().toString(),
-                    edtArea.getText().toString(),
-                    edtExtra.getText().toString()
+                    edtWeight.getText().toString(),//
+                    edtArea.getText().toString(),//
+                    edtExtra.getText().toString()//
             );
         } catch (IllegalArgumentException error) {
             showError(error.getMessage());
@@ -80,7 +80,13 @@ public class PickupFragment extends Fragment {
     }
 
     private void validateInput() throws IllegalArgumentException {
+        if (edtFloorLevel.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException("Please enter Floor Level");
+        }
 
+        if (edtParkingDistance.getText().toString().isEmpty()) {
+            throw new IllegalArgumentException("Please enter Distance from Parking");
+        }
     }
 
     @Override

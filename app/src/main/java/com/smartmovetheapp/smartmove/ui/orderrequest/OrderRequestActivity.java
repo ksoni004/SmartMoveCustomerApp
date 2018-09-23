@@ -125,7 +125,7 @@ public class OrderRequestActivity extends BaseActivity
     }
 
     @Override
-    public void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, String tripCount) {
+    public void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, Integer tripCount) {
         order.setPickupPlace(pickupPlace.getName().toString());
         order.setDropPlace(dropPlace.getName().toString());
         order.setPickupLat(pickupPlace.getLatLng().latitude);
@@ -136,7 +136,7 @@ public class OrderRequestActivity extends BaseActivity
         order.setTime(dateTime);
         int truckTypeId = truckType.equals("Standard Car")? 1 : truckType.equals("Pickup Truck")? 2 : 3;
         order.setTruckTypeId(truckTypeId);
-        order.setEstimatedNumOfTrips(Integer.parseInt(tripCount));
+        order.setEstimatedNumOfTrips(tripCount);
 
         runningOrderState = OrderState.PICK_UP_PLACE;
 
@@ -164,8 +164,8 @@ public class OrderRequestActivity extends BaseActivity
         order.setDropFloor(floorLevel);
         order.setDropHasElevator(elevator);
         order.setDropDistanceFromParking(parkingDistance);
-        order.setEstimatedWeight(weight);
-        order.setEstimatedArea(area);
+        //order.setEstimatedWeight(weight);
+        //order.setEstimatedArea(area);
         order.setDropAdditionalInfo(extra);
 
         runningOrderState = OrderState.SUMMARY;
