@@ -1,7 +1,5 @@
 package com.smartmovetheapp.smartmove.data.remote.model;
 
-import java.util.Date;
-
 public class Order {
 
     private int orderId; // Not Mandatory
@@ -9,8 +7,6 @@ public class Order {
     private int customerId;
 
     private int truckTypeId;
-
-    private Date orderDateTime;
 
     private long date;
 
@@ -78,14 +74,6 @@ public class Order {
 
     public void setTruckTypeId(int truckTypeId) {
         this.truckTypeId = truckTypeId;
-    }
-
-    public Date getOrderDateTime() {
-        return orderDateTime;
-    }
-
-    public void setOrderDateTime(Date orderDateTime) {
-        this.orderDateTime = orderDateTime;
     }
 
     public long getDate() {
@@ -269,7 +257,6 @@ public class Order {
         return "Order{" +
                 "orderId=" + orderId +
                 ", truckTypeId=" + truckTypeId +
-                ", orderDateTime=" + orderDateTime +
                 ", date=" + date +
                 ", time=" + time +
                 ", pickupPlace='" + pickupPlace + '\'' +

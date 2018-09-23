@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,9 +38,12 @@ import retrofit2.Response;
 
 public class TripActivity extends BaseActivity {
 
+    private Snackbar loadingSnackbar;
+
     private final Callback<TripResponse> tripCallback = new Callback<TripResponse>() {
         @Override
         public void onResponse(Call<TripResponse> call, Response<TripResponse> response) {
+            hideLoading();
             if (response.isSuccessful() && response.body() != null) {
                 currentOrders = response.body().getRunningOrders();
                 pastOrders =  response.body().getCompletedOrders();
@@ -52,6 +56,7 @@ public class TripActivity extends BaseActivity {
 
         @Override
         public void onFailure(Call<TripResponse> call, Throwable t) {
+            hideLoading();
             showError(R.string.default_error);
         }
     };
@@ -59,6 +64,14 @@ public class TripActivity extends BaseActivity {
     public static void start(Context context) {
         Intent starter = new Intent(context, TripActivity.class);
         context.startActivity(starter);
+    }
+
+    private void showLoading() {
+        loadingSnackbar.show();
+    }
+
+    private void hideLoading() {
+        loadingSnackbar.dismiss();
     }
 
     /**
@@ -98,6 +111,8 @@ public class TripActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
+        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content), "Getting trips..", Snackbar.LENGTH_INDEFINITE);
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
@@ -109,6 +124,7 @@ public class TripActivity extends BaseActivity {
         //currentOrders = OrderRepository.getStoredListOfOrder();
         //mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        showLoading();
         ApiClient.create().getTrips(Long.valueOf(SessionRepository.getInstance().getCustomerId()))
                 .enqueue(tripCallback);
     }

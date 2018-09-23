@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import com.google.gson.Gson;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmove.ui.bids.BidsActivity;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
 
 public class TripDetailActivity extends BaseActivity {
@@ -40,6 +42,9 @@ public class TripDetailActivity extends BaseActivity {
     private TextView txtParkingDistanceD;
     private TextView txtExtraD;
 
+    //card buttons
+    private CardView cvBidsButton;
+
     public static void start(Context context, Order order) {
         Intent starter = new Intent(context, TripDetailActivity.class);
         Gson gson = new Gson();
@@ -50,7 +55,7 @@ public class TripDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_summary);
+        setContentView(R.layout.activity_trip_detail);
 
         if (!getIntent().hasExtra(ORDER_EXTRA)) {
             finish();
@@ -81,6 +86,12 @@ public class TripDetailActivity extends BaseActivity {
         swtElevatorD = findViewById(R.id.swt_elevator_d);
         txtParkingDistanceD = findViewById(R.id.txt_parking_distance_d);
         txtExtraD = findViewById(R.id.txt_extra_d);
+
+        cvBidsButton = findViewById(R.id.cv_bids_click);
+
+        cvBidsButton.setOnClickListener(button -> {
+            BidsActivity.start(this, order.getOrderId());
+        });
 
         populateOrder(order);
     }

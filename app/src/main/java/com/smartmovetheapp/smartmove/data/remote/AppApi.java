@@ -20,7 +20,18 @@ public interface AppApi {
     @POST("api/Customer/CreateOrder")
     Call<Void> createOrder(@Body Order order);
 
-    //api/Customer/CreateOrder?customerId=2
     @GET("api/Customer/GetOrders")
     Call<TripResponse> getTrips(@Query("customerId") Long customerId);
+
+    @GET("api/Customer/GetOrderBids")
+    Call<Void> getBids(@Query("orderId") int orderId);
+
+    /*Get Order Bids:
+api/Customer/GetOrderBids?orderId=value
+
+Accept a Bid:
+api/Customer/AcceptBid?bidId=value
+
+Order Cancel:
+api/Customer/CancelOrder?orderId=value*/
 }

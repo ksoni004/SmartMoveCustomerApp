@@ -197,8 +197,7 @@ public class OrderRequestActivity extends BaseActivity
     }
 
     private void performServerCall(Order orderDTO) {
-        Date date = new Date();
-        orderDTO.setOrderDateTime(new Timestamp(date.getTime()));
+        //orderDTO.setOrderDateTime(System.currentTimeMillis());
         orderDTO.setCustomerId(SessionRepository.getInstance().getCustomerId());
         orderDTO.setOrderStatus("PENDING");
         OrderRepository.getInstance().attemptCreateOrder(orderDTO).enqueue(createOrderCallback);
