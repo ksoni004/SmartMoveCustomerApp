@@ -18,4 +18,6 @@ public interface AppApi {
 
     @POST("api/Customer/CreateOrder")
     Call<Order> createOrder(@Body Order order);
+
+    //api/Customer/CreateOrder?customerId=2 -- integer query string parameter
 }

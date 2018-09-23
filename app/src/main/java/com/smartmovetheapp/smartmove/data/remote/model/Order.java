@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Order {
 
-    private int orderId;
+    private int orderId; // Not Mandatory
 
     private int customerId;
 
@@ -22,7 +22,7 @@ public class Order {
 
     private double pickupLong;
 
-    private String pickupUnitNumber;
+    private String pickupUnitNumber;// Not Mandatory
 
     private String pickupFloor;
 
@@ -30,7 +30,7 @@ public class Order {
 
     private String pickupDistanceFromParking;
 
-    private String pickupAdditionalInfo;
+    private String pickupAdditionalInfo;// Not Mandatory
 
     private String dropPlace;
 
@@ -38,7 +38,7 @@ public class Order {
 
     private double dropLong;
 
-    private String dropUnitNumber;
+    private String dropUnitNumber;// Not Mandatory
 
     private String dropFloor;
 
@@ -46,13 +46,13 @@ public class Order {
 
     private String dropDistanceFromParking;
 
-    private String dropAdditionalInfo;
+    private String dropAdditionalInfo;// Not Mandatory
 
-    private int estimatedNumOfTrips;
+    private int estimatedNumOfTrips;// Not Mandatory
 
-    private String estimatedWeight;
+    private String estimatedWeight;// Not Mandatory
 
-    private String estimatedArea;
+    private String estimatedArea;// Not Mandatory
 
     private String orderStatus;
 
