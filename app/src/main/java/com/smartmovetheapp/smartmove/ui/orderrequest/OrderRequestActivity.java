@@ -6,11 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 
 /*import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;*/
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.LoginResponse;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
@@ -41,7 +47,9 @@ public class OrderRequestActivity extends BaseActivity
 
     private int runningOrderState = OrderState.INTIAL_SCREEN;
     private Order order;
-    AlertDialog loading;
+    private AlertDialog loading;
+    private FrameLayout frmGoogleSearchLayout;
+    private PlaceAutocompleteFragment autocompleteFragment;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, OrderRequestActivity.class);
@@ -53,6 +61,11 @@ public class OrderRequestActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_request);
 
+        frmGoogleSearchLayout = findViewById(R.id.frm_google_search_container);
+        autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        frmGoogleSearchLayout.setVisibility(View.GONE);
+
         loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
                 .setMessage("Creating your order..")
                 .setCancelable(false)
@@ -63,23 +76,6 @@ public class OrderRequestActivity extends BaseActivity
         attachToolbar(findViewById(R.id.toolbar), true);
         attachFragment(OrderRequestFragment.newInstance(), R.id.frm_fragment_container);
         getSupportActionBar().setTitle(OrderFactory.getTitleForState(runningOrderState));
-
-        /*PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                //Log.i(TAG, "Place: " + place.getName());
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-                //Log.i(TAG, "An error occurred: " + status);
-            }
-        });*/
     }
 
     @Override
@@ -114,9 +110,28 @@ public class OrderRequestActivity extends BaseActivity
     }
 
     @Override
-    public void onNextOfOrderClick(String pickup, String drop, long dateTime, String truckType, String tripCount) {
-        order.setPickupPlace(pickup);
-        order.setDropPlace(drop);
+    public void showLocationSearch(PlaceSelectionListener listener) {
+        frmGoogleSearchLayout.setVisibility(View.VISIBLE);
+        autocompleteFragment.setOnPlaceSelectedListener(listener);
+
+        final View root = autocompleteFragment.getView();
+        root.post(() -> root.findViewById(R.id.place_autocomplete_search_input).performClick());
+    }
+
+    @Override
+    public void hideLocationSearch() {
+        autocompleteFragment.setOnPlaceSelectedListener(null);
+        frmGoogleSearchLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, String tripCount) {
+        order.setPickupPlace(pickupPlace.getName().toString());
+        order.setDropPlace(dropPlace.getName().toString());
+        order.setPickupLat(pickupPlace.getLatLng().latitude);
+        order.setPickupLong(pickupPlace.getLatLng().longitude);
+        order.setDropLat(dropPlace.getLatLng().latitude);
+        order.setDropLong(dropPlace.getLatLng().longitude);
         order.setDate(dateTime);
         order.setTime(dateTime);
         int truckTypeId = truckType.equals("Standard Car")? 1 : truckType.equals("Pickup Truck")? 2 : 3;
@@ -190,10 +205,6 @@ public class OrderRequestActivity extends BaseActivity
         Date date = new Date();
         orderDTO.setOrderDateTime(new Timestamp(date.getTime()));
         orderDTO.setCustomerId(2);
-        orderDTO.setPickupLat(1.11);
-        orderDTO.setPickupLong(2.22);
-        orderDTO.setDropLat(3.33);
-        orderDTO.setDropLong(4.44);
         orderDTO.setOrderStatus("PENDING");
         OrderRepository.getInstance().attemptCreateOrder(orderDTO).enqueue(createOrderCallback);
     }

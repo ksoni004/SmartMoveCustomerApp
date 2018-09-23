@@ -16,6 +16,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
@@ -28,11 +33,14 @@ public class OrderRequestFragment extends Fragment {
     private CardView cvPickup;
     private CardView cvDrop;
     private CardView cvDateTime;
-    private EditText edtPickup;
-    private EditText edtDrop;
+    private TextView txtPickup;
+    private TextView txtDrop;
     private TextView txtDateTime;
     private AppCompatSpinner spTruckType;
     private EditText edtTripCount;
+
+    private Place pickupPlace;
+    private Place dropPlace;
 
     private long orderDateTime;
 
@@ -56,8 +64,8 @@ public class OrderRequestFragment extends Fragment {
         cvPickup = view.findViewById(R.id.cv_pickup);
         cvDrop = view.findViewById(R.id.cv_destination);
         cvDateTime = view.findViewById(R.id.cv_date_time);
-        edtPickup = view.findViewById(R.id.edt_pickup_value);
-        edtDrop = view.findViewById(R.id.edt_destination_value);
+        txtPickup = view.findViewById(R.id.txt_pickup_value);
+        txtDrop = view.findViewById(R.id.txt_destination_value);
         txtDateTime = view.findViewById(R.id.txt_date_time);
         spTruckType = view.findViewById(R.id.sp_truck_type);
         edtTripCount = view.findViewById(R.id.edt_trip_count);
@@ -79,8 +87,8 @@ public class OrderRequestFragment extends Fragment {
         try {
             validateInput();
             actionListener.onNextOfOrderClick(
-                    edtPickup.getText().toString(),
-                    edtDrop.getText().toString(),
+                    pickupPlace,
+                    dropPlace,
                     orderDateTime,
                     getResources().getStringArray(R.array.truck_type_values)[spTruckType.getSelectedItemPosition()],
                     edtTripCount.getText().toString()
@@ -97,7 +105,13 @@ public class OrderRequestFragment extends Fragment {
     }
 
     private void validateInput() throws IllegalArgumentException {
+        if (pickupPlace == null) {
+            throw new IllegalArgumentException("Please select pickup point");
+        }
 
+        if (dropPlace == null) {
+            throw new IllegalArgumentException("Please select destination point");
+        }
     }
 
     private void onDateTimeClick() {
@@ -160,11 +174,37 @@ public class OrderRequestFragment extends Fragment {
     }
 
     private void onDropClick() {
+        actionListener.showLocationSearch(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                actionListener.hideLocationSearch();
+                txtDrop.setText(place.getName());
+                dropPlace = place;
+            }
 
+            @Override
+            public void onError(Status status) {
+                actionListener.hideLocationSearch();
+                showError("Failed to get your address, please try again");
+            }
+        });
     }
 
     private void onPickUpClick() {
+        actionListener.showLocationSearch(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                actionListener.hideLocationSearch();
+                txtPickup.setText(place.getName());
+                pickupPlace = place;
+            }
 
+            @Override
+            public void onError(Status status) {
+                actionListener.hideLocationSearch();
+                showError("Failed to get your address, please try again");
+            }
+        });
     }
 
     @Override
@@ -185,6 +225,10 @@ public class OrderRequestFragment extends Fragment {
     }
 
     public interface OrderRequestActionListener {
-        void onNextOfOrderClick(String pickup, String drop, long dateTime, String truckType, String tripCount);
+        void showLocationSearch(PlaceSelectionListener listener);
+
+        void hideLocationSearch();
+
+        void onNextOfOrderClick(Place pickupPlace, Place dropPlace, long dateTime, String truckType, String tripCount);
     }
 }
