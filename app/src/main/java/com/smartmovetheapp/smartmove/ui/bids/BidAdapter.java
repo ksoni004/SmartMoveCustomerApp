@@ -76,6 +76,12 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
         public void bindTo(OrderBid orderBid) {
             cvSelect.setTag(orderBid);
 
+            if (orderBid.getBidStatus().equals("ACCEPTED")) {
+                cvSelect.setVisibility(View.GONE);
+            } else {
+                cvSelect.setVisibility(View.VISIBLE);
+            }
+
             DecimalFormat df2 = new DecimalFormat(".##");
             txtAmount.setText(df2.format(orderBid.getBidAmount()) + "$");
             txtDetails.setText(orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");

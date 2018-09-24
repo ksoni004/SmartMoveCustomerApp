@@ -18,6 +18,7 @@ import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -142,6 +143,13 @@ public class BidsActivity extends BaseActivity {
         if (bids == null || bids.isEmpty()) {
             txtEmptyTrips.setVisibility(View.VISIBLE);
         } else {
+            for (OrderBid bid : bids) {
+                if (bid.getBidStatus().equals("ACCEPTED")) {
+                    bidAdapter.submitList(Collections.singletonList(bid));
+                    return;
+                }
+            }
+
             bidAdapter.submitList(bids);
         }
     }

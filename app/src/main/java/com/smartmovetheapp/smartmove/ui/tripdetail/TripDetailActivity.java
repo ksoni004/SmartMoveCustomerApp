@@ -89,6 +89,11 @@ public class TripDetailActivity extends BaseActivity {
 
         cvBidsButton = findViewById(R.id.cv_bids_click);
 
+        if (order.getOrderStatus().equals("CONFIRMED")) {
+            TextView txtButton = findViewById(R.id.txt_button);
+            txtButton.setText("Accepted Bids");
+        }
+
         cvBidsButton.setOnClickListener(button -> {
             BidsActivity.start(this, order.getOrderId());
         });
