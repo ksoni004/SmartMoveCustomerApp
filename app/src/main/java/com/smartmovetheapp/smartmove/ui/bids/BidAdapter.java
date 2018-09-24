@@ -14,6 +14,7 @@ import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
 
 public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
@@ -40,7 +41,7 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_trip, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_bid, parent, false);
         return new ViewHolder(view);
     }
 
@@ -75,8 +76,9 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
         public void bindTo(OrderBid orderBid) {
             cvSelect.setTag(orderBid);
 
-            txtAmount.setText(String.format(Locale.getDefault(), "%02f", orderBid.bidAmount));
-            txtDetails.setText("Trips: " + orderBid.getNumberOfTrips() + " for " + orderBid.getNumberOfHours());
+            DecimalFormat df2 = new DecimalFormat(".##");
+            txtAmount.setText(df2.format(orderBid.getBidAmount()) + "$");
+            txtDetails.setText(orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");
             txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getDate()));
             txtStatus.setText(orderBid.getBidStatus());
         }
