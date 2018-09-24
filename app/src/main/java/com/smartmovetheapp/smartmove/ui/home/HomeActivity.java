@@ -12,9 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.help.HelpActivity;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.ui.orderrequest.OrderRequestActivity;
+import com.smartmovetheapp.smartmove.ui.splash.SplashActivity;
 import com.smartmovetheapp.smartmove.ui.trips.TripActivity;
 
 public class HomeActivity extends AppCompatActivity
@@ -90,6 +92,10 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_settings) {
 
+        } else if (id == R.id.nav_logout) {
+            SessionRepository.getInstance().logout();
+            SplashActivity.start(this);
+            finish();
         }
         
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
