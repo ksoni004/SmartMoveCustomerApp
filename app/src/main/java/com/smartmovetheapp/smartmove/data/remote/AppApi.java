@@ -29,6 +29,10 @@ public interface AppApi {
     @GET("api/Customer/GetOrderBids")
     Call<List<OrderBid>> getBids(@Query("orderId") int orderId);
 
+    //api/Customer/AcceptBid?bidId=value
+    @POST("api/Customer/AcceptBid")
+    Call<Void> selectBid(@Query("bidId") int bidId);
+
     /*Get Order Bids:
 api/Customer/GetOrderBids?orderId=value
 
