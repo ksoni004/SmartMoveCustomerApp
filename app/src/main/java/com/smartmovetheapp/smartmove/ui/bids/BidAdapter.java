@@ -85,7 +85,7 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
             DecimalFormat df2 = new DecimalFormat(".##");
             txtAmount.setText(df2.format(orderBid.getBidAmount()) + "$");
             txtDetails.setText(orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");
-            txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getDate()));
+            txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getTime()));
             txtStatus.setText(orderBid.getBidStatus());
         }
     }

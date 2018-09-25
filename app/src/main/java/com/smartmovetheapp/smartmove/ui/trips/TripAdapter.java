@@ -74,7 +74,7 @@ public class TripAdapter extends ListAdapter<Order, TripAdapter.ViewHolder> {
 
             txtPickup.setText(order.getPickupPlace());
             txtDrop.setText(order.getDropPlace());
-            txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
+            txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getTime()));
             txtStatus.setText(order.getOrderStatus());
         }
     }

@@ -3,8 +3,10 @@ package com.smartmovetheapp.smartmove.ui.bids;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +18,9 @@ import android.widget.TextView;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
+import com.smartmovetheapp.smartmove.util.FragmentHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BidsActivity extends BaseActivity {
+public class BidsActivity extends BaseActivity implements PaymentFragment.PaymentActionListener {
 
     private static final String ORDER_ID_EXTRA = "order_id";
 
@@ -58,7 +62,7 @@ public class BidsActivity extends BaseActivity {
             hideAcceptBidLoading();
             if (response.isSuccessful()) {
                 new AlertDialog.Builder(BidsActivity.this, R.style.SMDatePickerTheme)
-                        .setTitle("Bid has been selected.")
+                        .setTitle("Bid has been accepted.")
                         .setMessage("Bid has been allocated to your order.")
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
@@ -97,7 +101,7 @@ public class BidsActivity extends BaseActivity {
         }
 
         acceptLoading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
-                .setMessage("placing your order..")
+                .setMessage("Finalizing your Order..")
                 .setCancelable(false)
                 .create();
 
@@ -107,7 +111,7 @@ public class BidsActivity extends BaseActivity {
         attachToolbar(toolbar, true);
 
         loadingSnackbar = Snackbar.make(findViewById(android.R.id.content),
-                "Getting received bids..", Snackbar.LENGTH_INDEFINITE);
+                "Getting Received Bids..", Snackbar.LENGTH_INDEFINITE);
 
         rvTrips = findViewById(R.id.rv_bids);
         txtEmptyTrips = findViewById(R.id.txt_empty_trips);
@@ -160,5 +164,24 @@ public class BidsActivity extends BaseActivity {
 
     private void hideLoading() {
         loadingSnackbar.dismiss();
+    }
+
+    public void attachFragment(Fragment fragment, @IdRes int fragmentContainer) {
+        FragmentHelper.addFragment(
+                fragment,
+                getSupportFragmentManager(),
+                fragmentContainer,
+                null
+        );
+    }
+
+    @Override
+    public void onNextOfPaymentClick() {
+        /*bid.setOrderId(orderId);
+        bid.setTruckOwnerId(SessionRepository.getInstance().getCustomerId());
+        bid.setBidStatus("PENDING");
+
+        showLoading();
+        ApiClient.create().placeBid(bid).enqueue(createBidCallback);*/
     }
 }

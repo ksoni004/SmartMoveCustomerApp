@@ -104,7 +104,7 @@ public class TripDetailActivity extends BaseActivity {
     private void populateOrder(Order order) {
         txtPickupPlace.setText(order.getPickupPlace());
         txtDropPlace.setText(order.getDropPlace());
-        txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getDate()));
+        txtDateTime.setText(CalenderUtil.getDisplayDateTime(order.getTime()));
         txtTruckType.setText(getTruckTypeText(order.getTruckTypeId()));
         txtTripCount.setText(order.getEstimatedNumOfTrips() == null ? "--" : String.valueOf(order.getEstimatedNumOfTrips()));
 

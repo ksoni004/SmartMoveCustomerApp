@@ -24,7 +24,7 @@ public interface AppApi {
     Call<Void> createOrder(@Body Order order);
 
     @GET("api/Customer/GetOrders")
-    Call<TripResponse> getTrips(@Query("customerId") Long customerId);
+    Call<TripResponse> getOrders(@Query("customerId") Long customerId);
 
     @GET("api/Customer/GetOrderBids")
     Call<List<OrderBid>> getBids(@Query("orderId") int orderId);

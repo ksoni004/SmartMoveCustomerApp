@@ -119,6 +119,10 @@ public class OrderRequestFragment extends Fragment {
         if (dropPlace == null) {
             throw new IllegalArgumentException("Please select destination point");
         }
+
+        if(txtDateTime == null) {
+            throw new IllegalArgumentException("Please select Date & Time");
+        }
     }
 
     private void onDateTimeClick() {

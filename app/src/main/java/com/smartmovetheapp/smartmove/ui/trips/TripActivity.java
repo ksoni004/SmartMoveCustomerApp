@@ -25,10 +25,8 @@ import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.data.remote.model.TripResponse;
-import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
 import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
-import com.smartmovetheapp.smartmove.ui.orderrequest.fragments.PaymentFragment;
 import com.smartmovetheapp.smartmove.ui.tripdetail.TripDetailActivity;
 
 import java.util.List;
@@ -112,7 +110,7 @@ public class TripActivity extends BaseActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content), "Getting trips..", Snackbar.LENGTH_INDEFINITE);
+        loadingSnackbar = Snackbar.make(findViewById(android.R.id.content), "Getting Orders..", Snackbar.LENGTH_INDEFINITE);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
@@ -126,7 +124,7 @@ public class TripActivity extends BaseActivity {
         //mViewPager.setAdapter(mSectionsPagerAdapter);
 
         showLoading();
-        ApiClient.create().getTrips(Long.valueOf(SessionRepository.getInstance().getCustomerId()))
+        ApiClient.create().getOrders(Long.valueOf(SessionRepository.getInstance().getCustomerId()))
                 .enqueue(tripCallback);
     }
 
