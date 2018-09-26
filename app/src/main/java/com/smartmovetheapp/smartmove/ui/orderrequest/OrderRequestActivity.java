@@ -16,6 +16,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;*/
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.data.repository.OrderRepository;
@@ -203,9 +204,9 @@ public class OrderRequestActivity extends BaseActivity
         OrderRepository.getInstance().attemptCreateOrder(orderDTO).enqueue(createOrderCallback);
     }
 
-    private final Callback<Void> createOrderCallback = new Callback<Void>() {
+    private final Callback<Order> createOrderCallback = new Callback<Order>() {
         @Override
-        public void onFailure(Call<Void> call, Throwable t) {
+        public void onFailure(Call<Order> call, Throwable t) {
             Log.d("==AAAA1==", t.getLocalizedMessage());
             Log.d("==AAAA2==", t.getMessage());
             hideLoading();
@@ -213,7 +214,7 @@ public class OrderRequestActivity extends BaseActivity
         }
 
         @Override
-        public void onResponse(Call<Void> call, Response<Void> response) {
+        public void onResponse(Call<Order> call, Response<Order> response) {
             hideLoading();
             if (response.isSuccessful()) {
                 new AlertDialog.Builder(OrderRequestActivity.this, R.style.SMDatePickerTheme)
@@ -228,6 +229,7 @@ public class OrderRequestActivity extends BaseActivity
                         })
                         .show();
 
+                FirebaseMessaging.getInstance().subscribeToTopic("order" + response.body().getOrderId());
             } else {
                 if (response.code() == HttpURLConnection.HTTP_BAD_REQUEST) {
                     showError("Bad request error");

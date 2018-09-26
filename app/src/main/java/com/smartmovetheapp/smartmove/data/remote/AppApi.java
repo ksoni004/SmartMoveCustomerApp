@@ -21,7 +21,7 @@ public interface AppApi {
     Call<User> signup(@Body Customer request);
 
     @POST("api/Customer/CreateOrder")
-    Call<Void> createOrder(@Body Order order);
+    Call<Order> createOrder(@Body Order order);
 
     @GET("api/Customer/GetOrders")
     Call<TripResponse> getOrders(@Query("customerId") Long customerId);

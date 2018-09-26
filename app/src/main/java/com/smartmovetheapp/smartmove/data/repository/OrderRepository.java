@@ -55,7 +55,7 @@ public class OrderRepository {
         return orders;
     }
 
-    public Call<Void> attemptCreateOrder(Order orderDto) {
+    public Call<Order> attemptCreateOrder(Order orderDto) {
         Order o = new Order();
         o = orderDto;
         return ApiClient.create().createOrder(o);
