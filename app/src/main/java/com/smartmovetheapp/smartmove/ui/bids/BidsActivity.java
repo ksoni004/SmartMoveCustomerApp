@@ -1,5 +1,6 @@
 package com.smartmovetheapp.smartmove.ui.bids;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,6 +66,7 @@ public class BidsActivity extends BaseActivity implements BidPaymentFragment.Pay
                         .setCancelable(false)
                         .setPositiveButton("OK", (dialog, which) -> {
                             dialog.dismiss();
+                            setResult(RESULT_OK);
                             finish();
                         })
                         .show();
@@ -80,11 +82,11 @@ public class BidsActivity extends BaseActivity implements BidPaymentFragment.Pay
         }
     };
 
-    public static void start(Context context, int orderId) {
+    public static void start(Activity context, int orderId, int requestCode) {
         Log.d("BidsActivity", "start: called");
         Intent starter = new Intent(context, BidsActivity.class);
         starter.putExtra(ORDER_ID_EXTRA, orderId);
-        context.startActivity(starter);
+        context.startActivityForResult(starter, requestCode);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.tripdetail.TripDetailActivity;
 
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -59,6 +61,7 @@ public class TripActivity extends BaseActivity {
             showError(R.string.default_error);
         }
     };
+    private static TripAdapter tripAdapter;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, TripActivity.class);
@@ -118,6 +121,13 @@ public class TripActivity extends BaseActivity {
         performServerCallToGetOrders();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        mSectionsPagerAdapter.getItem(mViewPager.getCurrentItem()).onActivityResult(requestCode, resultCode, data);
+    }
+
     private void performServerCallToGetOrders() {
         //dummy data
         //currentOrders = OrderRepository.getStoredListOfOrder();
@@ -135,6 +145,7 @@ public class TripActivity extends BaseActivity {
 
         private RecyclerView rvTrips;
         private TextView txtEmptyTrips;
+        private SwipeRefreshLayout swipeRefreshLayout;
         private FragmentContract contract;
 
         /**
@@ -171,6 +182,7 @@ public class TripActivity extends BaseActivity {
 
             rvTrips = view.findViewById(R.id.rv_trips);
             txtEmptyTrips = view.findViewById(R.id.txt_empty_trips);
+            swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
         }
 
         @Override
@@ -178,9 +190,14 @@ public class TripActivity extends BaseActivity {
             super.onActivityCreated(savedInstanceState);
 
             rvTrips.setLayoutManager(new LinearLayoutManager(getContext()));
-            TripAdapter tripAdapter = new TripAdapter(order ->
-                    TripDetailActivity.start(getContext(), order));
+            tripAdapter = new TripAdapter(order ->
+                    TripDetailActivity.start(getActivity(), order, 12));
             rvTrips.setAdapter(tripAdapter);
+
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                tripAdapter.submitList(Collections.EMPTY_LIST);
+                contract.refresh();
+            });
 
             List<Order> orders = contract.getOrders(getArguments().getInt(ARG_SECTION_NUMBER, 1));
             if (orders == null || orders.isEmpty()) {
@@ -200,6 +217,19 @@ public class TripActivity extends BaseActivity {
             } else {
                 tripAdapter.submitList(orders);
             }*/
+        }
+
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode == 12 && resultCode == RESULT_OK) {
+                tripAdapter.submitList(Collections.EMPTY_LIST);
+                if (swipeRefreshLayout != null) {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+                contract.refresh();
+            }
         }
 
         /*@Override
@@ -234,7 +264,17 @@ public class TripActivity extends BaseActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1, pageNo -> pageNo == 1 ? currentOrders : pastOrders);
+            return PlaceholderFragment.newInstance(position + 1, new FragmentContract() {
+                @Override
+                public List<Order> getOrders(int pageNo) {
+                    return pageNo == 1 ? currentOrders : pastOrders;
+                }
+
+                @Override
+                public void refresh() {
+                    performRefreshTask();
+                }
+            });
         }
 
         @Override
@@ -244,7 +284,13 @@ public class TripActivity extends BaseActivity {
         }
     }
 
+    private void performRefreshTask() {
+        performServerCallToGetOrders();
+    }
+
     public interface FragmentContract {
         List<Order> getOrders(int pageNo);
+
+        void refresh();
     }
 }

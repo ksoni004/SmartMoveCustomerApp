@@ -75,7 +75,7 @@ public class OrderRequestFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        orderDateTime = System.currentTimeMillis();
+        orderDateTime = -1;
 
         cvPickup.setOnClickListener(button -> onPickUpClick());
         cvDrop.setOnClickListener(button -> onDropClick());
@@ -120,14 +120,14 @@ public class OrderRequestFragment extends Fragment {
             throw new IllegalArgumentException("Please select destination point");
         }
 
-        if(txtDateTime == null) {
+        if(orderDateTime == -1) {
             throw new IllegalArgumentException("Please select Date & Time");
         }
     }
 
     private void onDateTimeClick() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDateTime == -1 ? System.currentTimeMillis(): orderDateTime);
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 getContext(),
                 R.style.SMDatePickerTheme,
@@ -147,7 +147,7 @@ public class OrderRequestFragment extends Fragment {
 
     private void showTimePicker() {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDateTime == -1 ? System.currentTimeMillis() : orderDateTime);
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 getContext(),
                 R.style.SMDatePickerTheme,
@@ -165,7 +165,7 @@ public class OrderRequestFragment extends Fragment {
 
     private void storeSelectedTime(int hourOfDay, int minute) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDateTime == -1 ? System.currentTimeMillis() : orderDateTime);
 
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
         calendar.set(Calendar.MINUTE, minute);
@@ -175,7 +175,7 @@ public class OrderRequestFragment extends Fragment {
 
     private void storeSelectedDate(int year, int month, int dayOfMonth) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(orderDateTime);
+        calendar.setTimeInMillis(orderDateTime == -1 ? System.currentTimeMillis() : orderDateTime);
 
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);

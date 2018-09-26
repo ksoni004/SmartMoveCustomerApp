@@ -1,10 +1,12 @@
 package com.smartmovetheapp.smartmove.ui.tripdetail;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -13,10 +15,15 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.bids.BidsActivity;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TripDetailActivity extends BaseActivity {
 
@@ -57,11 +64,49 @@ public class TripDetailActivity extends BaseActivity {
     //card buttons
     private CardView cvBidsButton;
 
-    public static void start(Context context, Order order) {
+    private AlertDialog loading;
+
+    private final Callback<Void> cancelBidCallback = new Callback<Void>() {
+        @Override
+        public void onResponse(Call<Void> call, Response<Void> response) {
+            hideLoading();
+            if (response.isSuccessful()) {
+                new AlertDialog.Builder(TripDetailActivity.this, R.style.SMDatePickerTheme)
+                        .setTitle("Order has been cancelled.")
+                        //.setMessage("Your scheduled Bid has been cancelled successfully.")
+                        .setCancelable(false)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            dialog.dismiss();
+
+                            setResult(RESULT_OK);
+                            finish();
+                        })
+                        .show();
+            } else {
+                showError(R.string.default_error);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<Void> call, Throwable t) {
+            hideLoading();
+            showError(R.string.default_error);
+        }
+    };
+
+    private void showLoading() {
+        loading.show();
+    }
+
+    private void hideLoading() {
+        loading.dismiss();
+    }
+
+    public static void start(Activity context, Order order, int requestCode) {
         Intent starter = new Intent(context, TripDetailActivity.class);
         Gson gson = new Gson();
         starter.putExtra(ORDER_EXTRA, gson.toJson(order));
-        context.startActivity(starter);
+        context.startActivityForResult(starter, requestCode);
     }
 
     @Override
@@ -108,6 +153,7 @@ public class TripDetailActivity extends BaseActivity {
         txtFinalPaymentStatus = findViewById(R.id.txt_final_payment_status);
 
         cvBidsButton = findViewById(R.id.cv_bids_click);
+        CardView cvCancelButton = findViewById(R.id.cv_cancel_click);
 
         txtInitialPaymentAmount.setText("$25.00");
         if (order.getOrderStatus().equals("CANCELLED"))
@@ -127,11 +173,41 @@ public class TripDetailActivity extends BaseActivity {
             txtButton.setText("View Accepted Bid");
         }
 
+        if (order.getOrderStatus().equals("COMPLETED")) {
+            cvBidsButton.setVisibility(View.GONE);
+        }
+
+        if (order.getOrderStatus().equals("PENDING") || order.getOrderStatus().equals("CONFIRMED")) {
+            cvCancelButton.setVisibility(View.VISIBLE);
+        } else {
+            cvCancelButton.setVisibility(View.GONE);
+        }
+
+        loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
+                .setMessage("Cancelling order..")
+                .setCancelable(false)
+                .create();
+
         cvBidsButton.setOnClickListener(button -> {
-            BidsActivity.start(this, order.getOrderId());
+            BidsActivity.start(this, order.getOrderId(), 11);
+        });
+        cvCancelButton.setOnClickListener(button -> {
+            showLoading();
+            ApiClient.create().cancelOrder(order.getOrderId())
+                    .enqueue(cancelBidCallback);
         });
 
         populateOrder(order);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 11 && resultCode == RESULT_OK) {
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     private void populateOrder(Order order) {
