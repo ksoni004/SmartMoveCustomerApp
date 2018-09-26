@@ -12,16 +12,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.R;
+import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
 
-public class PaymentFragment extends Fragment {
+public class BidPaymentFragment extends Fragment {
 
     private CardView cvPayment;
-    private TextView txtPaymentAmount;
 
     private PaymentActionListener actionListener;
+    private String amount;
+    private OrderBid orderBid;
 
-    public static PaymentFragment newInstance() {
-        return new PaymentFragment();
+    public static BidPaymentFragment newInstance(OrderBid orderBid, String amount) {
+        BidPaymentFragment bidPaymentFragment = new BidPaymentFragment();
+        bidPaymentFragment.amount = amount;
+        bidPaymentFragment.orderBid = orderBid;
+        return bidPaymentFragment;
     }
 
     @Nullable
@@ -35,18 +40,31 @@ public class PaymentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         cvPayment = view.findViewById(R.id.cv_start_payment);
-        txtPaymentAmount = view.findViewById(R.id.txt_payment_amount);
+        TextView txtAmount = view.findViewById(R.id.txt_payment_amount);
+        txtAmount.setText(String.format("%s$", amount));
+        TextView txtMessage = view.findViewById(R.id.textView2);
+        txtMessage.setText("Remaining Payment will be needed to Accept this bid");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //txtPaymentAmount.setText("$");
+
         cvPayment.setOnClickListener(button -> onNextClick());
     }
 
     private void onNextClick() {
-        actionListener.onNextOfPaymentClick();
+        /*AlertDialog loading = new AlertDialog.Builder(getContext(), R.style.SMDatePickerTheme)
+                .setMessage("Transaction in progress..")
+                .create();
+
+        loading.show();
+        new Handler(Looper.getMainLooper())
+                .postDelayed(() -> {
+                    loading.dismiss();
+                    actionListener.onNextOfPaymentClick();
+                }, 3000L);*/
+        actionListener.onNextOfPaymentClick(orderBid);
     }
 
 
@@ -68,6 +86,6 @@ public class PaymentFragment extends Fragment {
     }
 
     public interface PaymentActionListener {
-        void onNextOfPaymentClick();
+        void onNextOfPaymentClick(OrderBid orderBid);
     }
 }

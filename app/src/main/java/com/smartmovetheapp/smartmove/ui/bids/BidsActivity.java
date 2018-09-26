@@ -3,24 +3,21 @@ package com.smartmovetheapp.smartmove.ui.bids;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
-import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
-import com.smartmovetheapp.smartmove.util.FragmentHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,13 +26,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BidsActivity extends BaseActivity implements PaymentFragment.PaymentActionListener {
+public class BidsActivity extends BaseActivity implements BidPaymentFragment.PaymentActionListener {
 
     private static final String ORDER_ID_EXTRA = "order_id";
 
     private int orderId;
     private AlertDialog acceptLoading;
     private Snackbar loadingSnackbar;
+
     private final Callback<List<OrderBid>> bidsCallback = new Callback<List<OrderBid>>() {
         @Override
         public void onResponse(Call<List<OrderBid>> call, Response<List<OrderBid>> response) {
@@ -124,9 +122,8 @@ public class BidsActivity extends BaseActivity implements PaymentFragment.Paymen
     }
 
     private void onAcceptBid(OrderBid orderBid) {
-        showAcceptBidLoading();
-        ApiClient.create().selectBid(orderBid.bidId)
-                .enqueue(acceptBidCallback);
+        setTitle("Payment");
+        attachFragment(BidPaymentFragment.newInstance(orderBid, String.valueOf(orderBid.getBidAmount() - 25.0)), R.id.frm_fragment_container);
     }
 
     private void showAcceptBidLoading() {
@@ -135,6 +132,13 @@ public class BidsActivity extends BaseActivity implements PaymentFragment.Paymen
 
     private void hideAcceptBidLoading() {
         acceptLoading.dismiss();
+    }
+
+    @Override
+    public void onNextOfPaymentClick(OrderBid orderBid) {
+        showAcceptBidLoading();
+        ApiClient.create().selectBid(orderBid.bidId)
+                .enqueue(acceptBidCallback);
     }
 
     private void performServerCall() {
@@ -166,22 +170,18 @@ public class BidsActivity extends BaseActivity implements PaymentFragment.Paymen
         loadingSnackbar.dismiss();
     }
 
-    public void attachFragment(Fragment fragment, @IdRes int fragmentContainer) {
-        FragmentHelper.addFragment(
-                fragment,
-                getSupportFragmentManager(),
-                fragmentContainer,
-                null
-        );
+    @Override
+    public void onToolbarBackPress() {
+        onBackPressed();
     }
 
     @Override
-    public void onNextOfPaymentClick() {
-        /*bid.setOrderId(orderId);
-        bid.setTruckOwnerId(SessionRepository.getInstance().getCustomerId());
-        bid.setBidStatus("PENDING");
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
 
-        showLoading();
-        ApiClient.create().placeBid(bid).enqueue(createBidCallback);*/
+            setTitle("Bids received");
+        }
+
+        super.onBackPressed();
     }
 }

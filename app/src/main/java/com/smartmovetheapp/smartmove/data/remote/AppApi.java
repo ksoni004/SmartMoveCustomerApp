@@ -33,6 +33,9 @@ public interface AppApi {
     @POST("api/Customer/AcceptBid")
     Call<Void> selectBid(@Query("bidId") int bidId);
 
+    @POST("api/Customer/CancelOrder")
+    Call<Void> cancelOrder(@Query("orderId") int orderId);
+
     /*Get Order Bids:
 api/Customer/GetOrderBids?orderId=value
 
