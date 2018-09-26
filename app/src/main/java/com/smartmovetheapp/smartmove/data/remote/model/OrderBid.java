@@ -19,6 +19,10 @@ public class OrderBid {
 
     public String bidStatus; //Not In UI as field, Not Mandatory
 
+    public String driverName;
+
+    public double averageRating;
+
     public int getBidId() {
         return bidId;
     }
@@ -89,5 +93,21 @@ public class OrderBid {
 
     public void setBidStatus(String bidStatus) {
         this.bidStatus = bidStatus;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

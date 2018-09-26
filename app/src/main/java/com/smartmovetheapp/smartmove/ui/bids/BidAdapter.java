@@ -56,6 +56,8 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
         private TextView txtDetails;
         private TextView txtDateTime;
         private TextView txtStatus;
+        private TextView txtDriverName;
+        private TextView txtAverageRating;
         private CardView cvSelect;
 
         public ViewHolder(View itemView) {
@@ -65,6 +67,8 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
             txtDetails = itemView.findViewById(R.id.txt_drop_dest);
             txtDateTime = itemView.findViewById(R.id.txt_date_time);
             txtStatus = itemView.findViewById(R.id.txt_status);
+            txtDriverName = itemView.findViewById(R.id.txt_driver_name);
+            txtAverageRating = itemView.findViewById(R.id.txt_average_rating);
             cvSelect = itemView.findViewById(R.id.cv_select_button);
 
             cvSelect.setOnClickListener(button -> {
@@ -83,10 +87,12 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
             }
 
             DecimalFormat df2 = new DecimalFormat(".##");
-            txtAmount.setText(df2.format(orderBid.getBidAmount()) + "$");
-            txtDetails.setText(orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");
-            txtDateTime.setText(CalenderUtil.getDisplayDateTime(orderBid.getTime()));
+            txtAmount.setText("Bid Amount\u0009\u0009: $" + df2.format(orderBid.getBidAmount()));
+            txtDetails.setText("Require: " + orderBid.getNumberOfTrips() + " trips for " + orderBid.getNumberOfHours() + "Hrs");
+            txtDateTime.setText("Delivery Time\u0009: " + CalenderUtil.getDisplayDateTime(orderBid.getTime()));
             txtStatus.setText(orderBid.getBidStatus());
+            txtDriverName.setText("Driver Name\u0009\u0009: " + orderBid.getDriverName());
+            txtAverageRating.setText("Average Rating\u0009: " + orderBid.getAverageRating());
         }
     }
 

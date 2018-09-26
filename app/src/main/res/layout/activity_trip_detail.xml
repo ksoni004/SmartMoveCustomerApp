@@ -504,14 +504,14 @@
                     <!--extra-->
                     <TextView
                         android:id="@+id/txt_extra_title_d"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         style="@style/SMTextView.FieldHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="24dp"
+                        android:text="Additional Details: "
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/txt_area_title_d"
-                        android:text="Additional Details: " />
+                        app:layout_constraintTop_toBottomOf="@id/txt_area_title_d" />
 
                     <TextView
                         android:id="@+id/txt_extra_d"
@@ -531,6 +531,158 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
+                android:id="@+id/cv_initial_payment_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_drop_info">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txt_initial_payment_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="Initial Payment Info" />
+
+                    <!--payment amount-->
+                    <TextView
+                        android:id="@+id/txt_initial_payment_amount_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txt_initial_payment_info"
+                        android:text="Payment Amount: " />
+
+                    <TextView
+                        android:id="@+id/txt_initial_payment_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintStart_toEndOf="@id/txt_initial_payment_amount_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/txt_initial_payment_amount_title"
+                        app:layout_constraintBottom_toBottomOf="@id/txt_initial_payment_amount_title"/>
+
+                    <!--payment status-->
+                    <TextView
+                        android:id="@+id/txt_initial_payment_status_title"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txt_initial_payment_amount_title"
+                        android:text="Payment Status:" />
+
+                    <TextView
+                        android:id="@+id/txt_initial_payment_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:minLines="2"
+                        android:gravity="end"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@id/txt_initial_payment_status_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/txt_initial_payment_status_title"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cv_final_payment_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_initial_payment_info">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txt_final_payment_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="Final Payment Info" />
+
+                    <!--payment amount-->
+                    <TextView
+                        android:id="@+id/txt_final_payment_amount_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txt_final_payment_info"
+                        android:text="Payment Amount: " />
+
+                    <TextView
+                        android:id="@+id/txt_final_payment_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintStart_toEndOf="@id/txt_final_payment_amount_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/txt_final_payment_amount_title"
+                        app:layout_constraintBottom_toBottomOf="@id/txt_final_payment_amount_title"/>
+
+                    <!--payment status-->
+                    <TextView
+                        android:id="@+id/txt_final_payment_status_title"
+                        style="@style/SMTextView.FieldHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/txt_final_payment_amount_title"
+                        android:text="Payment Status:" />
+
+                    <TextView
+                        android:id="@+id/txt_final_payment_status"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:minLines="2"
+                        android:gravity="end"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toEndOf="@id/txt_final_payment_status_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/txt_final_payment_status_title"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:id="@+id/cv_bids_click"
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
@@ -540,7 +692,7 @@
                 app:cardUseCompatPadding="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cv_drop_info">
+                app:layout_constraintTop_toBottomOf="@id/cv_final_payment_info">
 
                 <TextView
                     android:id="@+id/txt_button"

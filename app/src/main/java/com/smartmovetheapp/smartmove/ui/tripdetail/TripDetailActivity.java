@@ -2,11 +2,13 @@ package com.smartmovetheapp.smartmove.ui.tripdetail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -41,6 +43,16 @@ public class TripDetailActivity extends BaseActivity {
     private SwitchCompat swtElevatorD;
     private TextView txtParkingDistanceD;
     private TextView txtExtraD;
+
+    //initial payment
+    private CardView cvInitialPaymentInfo;
+    private TextView txtInitialPaymentAmount;
+    private TextView txtInitialPaymentStatus;
+
+    //final payment
+    private CardView cvFinalPaymentInfo;
+    private TextView txtFinalPaymentAmount;
+    private TextView txtFinalPaymentStatus;
 
     //card buttons
     private CardView cvBidsButton;
@@ -87,11 +99,32 @@ public class TripDetailActivity extends BaseActivity {
         txtParkingDistanceD = findViewById(R.id.txt_parking_distance_d);
         txtExtraD = findViewById(R.id.txt_extra_d);
 
+        cvInitialPaymentInfo = findViewById(R.id.cv_initial_payment_info);
+        txtInitialPaymentAmount = findViewById(R.id.txt_initial_payment_amount);
+        txtInitialPaymentStatus = findViewById(R.id.txt_initial_payment_status);
+
+        cvFinalPaymentInfo = findViewById(R.id.cv_final_payment_info);
+        txtFinalPaymentAmount = findViewById(R.id.txt_final_payment_amount);
+        txtFinalPaymentStatus = findViewById(R.id.txt_final_payment_status);
+
         cvBidsButton = findViewById(R.id.cv_bids_click);
+
+        txtInitialPaymentAmount.setText("$25.00");
+        if (order.getOrderStatus().equals("CANCELLED"))
+            txtInitialPaymentStatus.setText("REVERSED");
+        else
+            txtInitialPaymentStatus.setText("SUCCESS");
+
+        cvFinalPaymentInfo.setVisibility(View.GONE);
+        /*if (order.getOrderStatus().equals("PENDING")) {
+            cvFinalPaymentInfo.setVisibility(View.GONE);
+        } else {
+            txtFinalPaymentStatus.setText("SUCCESS");
+        }*/
 
         if (order.getOrderStatus().equals("CONFIRMED")) {
             TextView txtButton = findViewById(R.id.txt_button);
-            txtButton.setText("Accepted Bids");
+            txtButton.setText("View Accepted Bid");
         }
 
         cvBidsButton.setOnClickListener(button -> {
@@ -121,6 +154,9 @@ public class TripDetailActivity extends BaseActivity {
         swtElevatorD.setEnabled(false);
         txtParkingDistanceD.setText(order.getDropDistanceFromParking());
         txtExtraD.setText(order.getDropAdditionalInfo().trim().isEmpty() ? "--" : order.getDropAdditionalInfo());
+
+        txtInitialPaymentAmount.setText("$25.00");
+        txtInitialPaymentStatus.setText("SUCCESS");
     }
 
     private String getTruckTypeText(int truckTypeId) {
