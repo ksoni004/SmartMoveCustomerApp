@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.ApiClient;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
+import com.smartmovetheapp.smartmove.data.repository.SessionRepository;
 import com.smartmovetheapp.smartmove.ui.base.BaseActivity;
 import com.smartmovetheapp.smartmove.ui.bids.BidsActivity;
 import com.smartmovetheapp.smartmove.util.CalenderUtil;
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TripDetailActivity extends BaseActivity {
+public class TripDetailActivity extends BaseActivity implements RatingDialog.RatingActionListener {
 
     private static final String ORDER_EXTRA = "order";
     private Order order;
@@ -63,6 +64,7 @@ public class TripDetailActivity extends BaseActivity {
 
     //card buttons
     private CardView cvBidsButton;
+    private CardView cvRatingButton;
 
     private AlertDialog loading;
 
@@ -153,6 +155,7 @@ public class TripDetailActivity extends BaseActivity {
         txtFinalPaymentStatus = findViewById(R.id.txt_final_payment_status);
 
         cvBidsButton = findViewById(R.id.cv_bids_click);
+        cvRatingButton = findViewById(R.id.cv_rating_click);
         CardView cvCancelButton = findViewById(R.id.cv_cancel_click);
 
         txtInitialPaymentAmount.setText("$25.00");
@@ -183,6 +186,12 @@ public class TripDetailActivity extends BaseActivity {
             cvCancelButton.setVisibility(View.GONE);
         }
 
+        if (order.getOrderStatus().equals("COMPLETED") && !order.isHasCustomerRating()) {
+            cvRatingButton.setVisibility(View.VISIBLE);
+        } else {
+            cvRatingButton.setVisibility(View.GONE);
+        }
+
         loading = new AlertDialog.Builder(this, R.style.SMDatePickerTheme)
                 .setMessage("Cancelling order..")
                 .setCancelable(false)
@@ -195,6 +204,10 @@ public class TripDetailActivity extends BaseActivity {
             showLoading();
             ApiClient.create().cancelOrder(order.getOrderId())
                     .enqueue(cancelBidCallback);
+        });
+        cvRatingButton.setOnClickListener(button -> {
+            RatingDialog.getInstance(this, order.getOrderId(), SessionRepository.getInstance().getCustomerId(), this)
+                    .show();
         });
 
         populateOrder(order);
@@ -246,5 +259,11 @@ public class TripDetailActivity extends BaseActivity {
             default:
                 return "--";
         }
+    }
+
+    @Override
+    public void onSubmitRating() {
+        setResult(RESULT_OK);
+        finish();
     }
 }

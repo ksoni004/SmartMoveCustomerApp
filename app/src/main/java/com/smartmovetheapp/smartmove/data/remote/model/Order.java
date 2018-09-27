@@ -52,6 +52,8 @@ public class Order {
 
     private String orderStatus;
 
+    private boolean hasCustomerRating;
+
     public int getOrderId() {
         return orderId;
     }
@@ -280,5 +282,13 @@ public class Order {
                 ", estimatedArea='" + estimatedArea + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 '}';
+    }
+
+    public boolean isHasCustomerRating() {
+        return hasCustomerRating;
+    }
+
+    public void setHasCustomerRating(boolean hasCustomerRating) {
+        this.hasCustomerRating = hasCustomerRating;
     }
 }

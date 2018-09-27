@@ -1,7 +1,9 @@
 package com.smartmovetheapp.smartmove.data.remote;
 
+import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.data.remote.model.Customer;
 import com.smartmovetheapp.smartmove.data.remote.model.OrderBid;
+import com.smartmovetheapp.smartmove.data.remote.model.Rating;
 import com.smartmovetheapp.smartmove.data.remote.model.User;
 import com.smartmovetheapp.smartmove.data.remote.model.Order;
 import com.smartmovetheapp.smartmove.data.remote.model.TripResponse;
@@ -35,6 +37,9 @@ public interface AppApi {
 
     @POST("api/Customer/CancelOrder")
     Call<Void> cancelOrder(@Query("orderId") int orderId);
+
+    @POST("api/TruckOwner/RateCustomer")
+    Call<Void> subitRating(@Body Rating rating);
 
     /*Get Order Bids:
 api/Customer/GetOrderBids?orderId=value
