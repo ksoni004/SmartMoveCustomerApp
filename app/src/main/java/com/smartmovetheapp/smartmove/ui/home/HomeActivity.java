@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.smartmovetheapp.smartmove.data.remote.model.User;
@@ -20,6 +21,7 @@ import com.smartmovetheapp.smartmove.R;
 import com.smartmovetheapp.smartmove.ui.orderrequest.OrderRequestActivity;
 import com.smartmovetheapp.smartmove.ui.splash.SplashActivity;
 import com.smartmovetheapp.smartmove.ui.trips.TripActivity;
+import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,9 +47,20 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtUserName);
+        TextView txtProfileName = navigationView.getHeaderView(0).findViewById(R.id.txtUserName);
         User user = SessionRepository.getInstance().getLoggedInUser();
         txtProfileName.setText(user.getFirstName() + " " + user.getLastName());
+
+        ImageView profilePicture = navigationView.getHeaderView(0).findViewById(R.id.imageView);
+        if(user.getProfilePictureURL() != null && !user.getProfilePictureURL().isEmpty()) {
+            Picasso.get()
+                    .load("https://smartmoveweb.azurewebsites.net" + user.getProfilePictureURL())
+                    .into(profilePicture);
+        }
+        profilePicture.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        TextView txtAverageRating = navigationView.getHeaderView(0).findViewById(R.id.avg_rating);
+        txtAverageRating.setText(user.getAverageRating() + "/5");
 
         findViewById(R.id.cv_order_request).setOnClickListener(button -> OrderRequestActivity.start(this));
     }

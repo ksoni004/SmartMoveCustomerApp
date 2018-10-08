@@ -38,15 +38,6 @@ public interface AppApi {
     @POST("api/Customer/CancelOrder")
     Call<Void> cancelOrder(@Query("orderId") int orderId);
 
-    @POST("api/TruckOwner/RateCustomer")
+    @POST("api/Customer/RateDriver")
     Call<Void> subitRating(@Body Rating rating);
-
-    /*Get Order Bids:
-api/Customer/GetOrderBids?orderId=value
-
-Accept a Bid:
-api/Customer/AcceptBid?bidId=value
-
-Order Cancel:
-api/Customer/CancelOrder?orderId=value*/
 }

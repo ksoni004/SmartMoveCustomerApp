@@ -24,6 +24,8 @@ public class User {
 
     private String profilePictureURL;
 
+    private double averageRating;
+
     public String getEmail() {
         return email;
     }
@@ -110,5 +112,13 @@ public class User {
 
     public void setProfilePictureURL(String profilePictureURL) {
         this.profilePictureURL = profilePictureURL;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
     }
 }

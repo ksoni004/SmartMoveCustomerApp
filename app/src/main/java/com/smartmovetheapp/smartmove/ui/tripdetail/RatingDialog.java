@@ -56,7 +56,7 @@ public class RatingDialog {
         rating.setCustomerId(customerId);
 
         alertDialog = new AlertDialog.Builder(context)
-                .setTitle("Rate this customer")
+                .setTitle("Rate this Driver")
                 .setView(R.layout.dialog_rating)
                 .setCancelable(false)
                 .create();

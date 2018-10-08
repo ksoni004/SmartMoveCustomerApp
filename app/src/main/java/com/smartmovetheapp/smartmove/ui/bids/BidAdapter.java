@@ -80,7 +80,7 @@ public class BidAdapter extends ListAdapter<OrderBid, BidAdapter.ViewHolder> {
         public void bindTo(OrderBid orderBid) {
             cvSelect.setTag(orderBid);
 
-            if (orderBid.getBidStatus().equals("ACCEPTED")) {
+            if (!orderBid.getBidStatus().equals("PENDING")) {
                 cvSelect.setVisibility(View.GONE);
             } else {
                 cvSelect.setVisibility(View.VISIBLE);

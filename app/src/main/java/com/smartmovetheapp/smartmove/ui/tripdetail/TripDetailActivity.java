@@ -177,7 +177,7 @@ public class TripDetailActivity extends BaseActivity implements RatingDialog.Rat
         }
 
         if (order.getOrderStatus().equals("COMPLETED")) {
-            cvBidsButton.setVisibility(View.GONE);
+            //cvBidsButton.setVisibility(View.GONE);
         }
 
         if (order.getOrderStatus().equals("PENDING") || order.getOrderStatus().equals("CONFIRMED")) {

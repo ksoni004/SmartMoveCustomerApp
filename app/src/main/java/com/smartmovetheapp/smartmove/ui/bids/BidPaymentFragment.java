@@ -41,9 +41,9 @@ public class BidPaymentFragment extends Fragment {
 
         cvPayment = view.findViewById(R.id.cv_start_payment);
         TextView txtAmount = view.findViewById(R.id.txt_payment_amount);
-        txtAmount.setText(String.format("%s$", amount));
+        txtAmount.setText(String.format("$%s", amount));
         TextView txtMessage = view.findViewById(R.id.textView2);
-        txtMessage.setText("Remaining Payment will be needed to Accept this bid");
+        txtMessage.setText("Remaining Payment will be needed to Accept this Bid");
     }
 
     @Override
